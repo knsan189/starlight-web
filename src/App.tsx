@@ -1,25 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Container, Box } from "@mui/material";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { USERS } from "./mocks/const";
+import PartyList from "./components/PartyList";
+import { IUser } from "./@types/types";
 
 function App() {
+  const [partyList, setPartyList] = useState<IUser[][]>(USERS);
+  const handleDragEnd = (result: DropResult) => {
+    const { source, destination, type } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (type === "party") {
+      console.log(result);
+      return;
+    }
+
+    const sourcePartyIndex = parseInt(result.source.droppableId, 10);
+    const sourceUserIndex = source.index;
+    const targetPartyIndex = parseInt(destination.droppableId, 10);
+    const targetUserIndex = destination.index;
+    const newPartyList = [...partyList];
+    const [target] = newPartyList[sourcePartyIndex].splice(sourceUserIndex, 1);
+    newPartyList[targetPartyIndex].splice(targetUserIndex, 0, target);
+    setPartyList(newPartyList);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Container>
+        <Box>
+          <PartyList list={partyList} />
+        </Box>
+      </Container>
+    </DragDropContext>
   );
 }
 
