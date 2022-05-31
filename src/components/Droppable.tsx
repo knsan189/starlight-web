@@ -1,11 +1,12 @@
 import React from "react";
 import { Direction, Droppable as ReactDroppable } from "react-beautiful-dnd";
+import { DropType } from "../@types/types";
 
 interface Props {
   children: React.ReactNode;
   droppableId: string;
   direction?: Direction;
-  type?: "user" | "party";
+  type?: DropType;
 }
 
 const Droppable = ({
@@ -22,8 +23,8 @@ const Droppable = ({
           {...provided.droppableProps}
           style={{
             display: "flex",
-            flexDirection: type === "party" ? "column" : "row",
-            alignItems: type === "party" ? "start" : undefined,
+            flexDirection: direction === "vertical" ? "column" : "row",
+            alignItems: direction === "vertical" ? "start" : undefined,
           }}
         >
           {children}

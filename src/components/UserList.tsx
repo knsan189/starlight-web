@@ -9,7 +9,7 @@ interface Props {
 }
 const UserList = ({ userList, partyIndex }: Props) => {
   return (
-    <Droppable droppableId={partyIndex.toString()} type="user">
+    <Droppable droppableId={`party-${partyIndex}`} type="user">
       {userList.map((user, index) => (
         <User key={user.charName} user={user} userIndex={index} />
       ))}

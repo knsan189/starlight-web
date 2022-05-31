@@ -1,4 +1,4 @@
-export const USERS = [
+export const PARTY_LIST = [
   [
     {
       charLevel: 1415,
@@ -43,4 +43,27 @@ export const USERS = [
       charClass: "4",
     },
   ],
+];
+
+export const USER_LIST = [
+  {
+    charLevel: 1415,
+    charName: "i",
+    charClass: "5",
+  },
+  {
+    charLevel: 1415,
+    charName: "j",
+    charClass: "5",
+  },
+  {
+    charLevel: 1415,
+    charName: "k",
+    charClass: "5",
+  },
+  {
+    charLevel: 1415,
+    charName: "l",
+    charClass: "5",
+  },
 ];
