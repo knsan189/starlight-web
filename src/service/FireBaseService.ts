@@ -25,6 +25,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const userListRef = doc(db, "storage", "userList");
+const partyListRef = doc(db, "storage", "partyList");
 
 class FirebaseService {
   public static async getUserList(): Promise<IUser[] | null> {

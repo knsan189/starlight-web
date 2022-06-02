@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Draggable as ReactDraggable,
-  DraggingStyle,
-  NotDraggingStyle,
-} from "react-beautiful-dnd";
+import { Draggable as ReactDraggable, DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
 
 interface Props {
   children: React.ReactNode;
@@ -13,10 +9,11 @@ interface Props {
 
 const getStyle = (
   isDragging: boolean,
-  draggableStyle: DraggingStyle | NotDraggingStyle | undefined
+  draggableStyle: DraggingStyle | NotDraggingStyle | undefined,
 ): React.CSSProperties => ({
   userSelect: "none",
   margin: `0 10px 10px 0`,
+
   ...draggableStyle,
 });
 

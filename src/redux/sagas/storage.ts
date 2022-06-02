@@ -8,8 +8,8 @@ const { SYNC_STORAGE } = StorageActionTypes;
 
 function* syncStorage() {
   try {
-    const response: IUser[] = yield call(FirebaseService.getUserList);
-    yield put(setUsers(response));
+    const userList: IUser[] = yield call(FirebaseService.getUserList);
+    yield put(setUsers(userList));
   } catch (error) {
     console.log(error);
   }

@@ -11,8 +11,8 @@ interface Props {
 const Party = ({ party, partyIndex }: Props) => {
   return (
     <Draggable draggableId={`party-${partyIndex}`} index={partyIndex}>
-      <Card>
-        <CardHeader subheader={`party-${partyIndex}`} />
+      <Card sx={{ minWidth: 400 }}>
+        <CardHeader subheader={`파티 ${partyIndex + 1}`} />
         <Divider />
         <CardContent>
           <UserList userList={party} partyIndex={partyIndex} />

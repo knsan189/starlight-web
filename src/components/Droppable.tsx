@@ -9,12 +9,7 @@ interface Props {
   type?: DropType;
 }
 
-const Droppable = ({
-  children,
-  droppableId,
-  direction = "horizontal",
-  type,
-}: Props) => {
+const Droppable = ({ children, droppableId, direction = "horizontal", type }: Props) => {
   return (
     <ReactDroppable droppableId={droppableId} direction={direction} type={type}>
       {(provided, snapshot) => (
@@ -25,6 +20,8 @@ const Droppable = ({
             display: "flex",
             flexDirection: direction === "vertical" ? "column" : "row",
             alignItems: direction === "vertical" ? "start" : undefined,
+            minWidth: 200,
+            minHeight: 80,
           }}
         >
           {children}
