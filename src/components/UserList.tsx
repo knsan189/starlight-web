@@ -11,7 +11,7 @@ const UserList = ({ userList, partyIndex }: Props) => {
   return (
     <Droppable droppableId={`party-${partyIndex}`} type="user">
       {userList.map((user, index) => (
-        <User key={user.charName} user={user} userIndex={index} />
+        <User key={user.charName} user={user} userIndex={index} type="user" />
       ))}
     </Droppable>
   );

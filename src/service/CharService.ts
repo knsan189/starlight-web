@@ -45,6 +45,10 @@ class CharService {
 
       const loadTime = new Date();
 
+      if (!charClass) {
+        throw new Error("오류");
+      }
+
       return {
         charClass,
         itemLevel: parseFloat(itemLevel),

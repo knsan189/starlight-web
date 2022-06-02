@@ -1,21 +1,24 @@
+import { Save } from "@mui/icons-material";
 import { Box, Button, Divider, styled, Typography } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
+import { addParty } from "../redux/reducers/party";
 import FirebaseService from "../service/FireBaseService";
 import PartyList from "./PartyList";
 
 const PartyLayout = styled(Box)<{ sidebar: boolean }>(({ theme, sidebar }) => ({
   background: theme.palette.grey[100],
   minHeight: "100vh",
-  width: "70%",
-  padding: theme.spacing(2),
+  width: "82%",
+  padding: theme.spacing(3),
   flexGrow: 1,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-30%`,
+  marginLeft: `-18%`,
   ...(sidebar && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,
@@ -32,24 +35,34 @@ interface Props {
 
 const Main = ({ sidebar, onToggleSidebar }: Props) => {
   const { users } = useSelector((state: RootState) => state.storage);
+  const { parties } = useSelector((state: RootState) => state.party);
+  const dispatch = useDispatch();
 
   const handleClickSave = async () => {
     await FirebaseService.setUserList(users);
+    await FirebaseService.setPartyList(parties);
     console.log("success");
+  };
+
+  const handleClickAdd = () => {
+    dispatch(addParty());
   };
 
   return (
     <PartyLayout sidebar={sidebar}>
-      <Box py={2} display="flex" justifyContent="space-between">
-        <Typography variant="h6">쿠크</Typography>
+      <Box pb={2} display="flex" justifyContent="space-between">
+        <Typography variant="h6">쿠크세이튼 파티</Typography>
         <Button variant="contained" onClick={handleClickSave}>
-          저장
+          저장하기
         </Button>
       </Box>
       <Divider />
       <Box pt={2}>
         <PartyList />
       </Box>
+      <Button variant="outlined" onClick={handleClickAdd}>
+        파티 추가하기
+      </Button>
     </PartyLayout>
   );
 };

@@ -5,7 +5,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Divider,
   InputBase,
+  List,
+  ListItem,
+  Paper,
+  TextField,
   Typography,
 } from "@mui/material";
 import { debounce } from "lodash";
@@ -50,15 +55,49 @@ const UserDialog = ({ open, onClose }: Props) => {
         </Typography>
         <InputBase fullWidth placeholder="닉네임 검색하기" onChange={handleChange} />
       </Box>
-      <DialogContent dividers>
+      <DialogContent dividers sx={{ p: 0 }}>
         {details ? (
           <Box>
-            <Typography>{details.charClass}</Typography>
-            <Typography>{details.charLevel}</Typography>
-            <Typography>{details.itemLevel}</Typography>
+            <Box sx={{ bgcolor: (theme) => theme.palette.grey[100], p: 2 }}>
+              <Paper>
+                <Box p={1} display="flex" justifyContent="space-between">
+                  <Typography variant="body2">서버</Typography>
+                  <Typography variant="body2">{details.serverName}</Typography>
+                </Box>
+                <Divider />
+                <Box p={1} display="flex" justifyContent="space-between">
+                  <Typography variant="body2">직업</Typography>
+                  <Typography variant="body2">{details.charClass}</Typography>
+                </Box>
+                <Divider />
+                <Box p={1} display="flex" justifyContent="space-between">
+                  <Typography variant="body2">아이템 레벨</Typography>
+                  <Typography variant="body2">{details.itemLevel}</Typography>
+                </Box>
+                <Divider />
+                <Box p={1} display="flex" justifyContent="space-between">
+                  <Typography variant="body2">길드</Typography>
+                  <Typography variant="body2">{details.guildName}</Typography>
+                </Box>
+                <Divider />
+                <Box p={1} display="flex" justifyContent="space-between">
+                  <Typography variant="body2">캐릭터 레벨</Typography>
+                  <Typography variant="body2">{details.charLevel}</Typography>
+                </Box>
+              </Paper>
+            </Box>
+            <Divider />
+            <Box p={2}>
+              <Typography gutterBottom variant="body2">
+                메모추가
+              </Typography>
+              <TextField fullWidth size="small" multiline />
+            </Box>
           </Box>
         ) : (
-          <Typography variant="body2">검색결과가 없습니다</Typography>
+          <Box height={130} p={2}>
+            <Typography variant="body2">검색결과가 없습니다</Typography>
+          </Box>
         )}
       </DialogContent>
       <DialogActions>

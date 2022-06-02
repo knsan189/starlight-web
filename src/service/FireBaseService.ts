@@ -47,6 +47,33 @@ class FirebaseService {
       await updateDoc(userListRef, { userList });
     } catch (err) {}
   }
+
+  public static async getPartyList(): Promise<IUser[][] | null> {
+    try {
+      const response = (await getDoc(partyListRef)).data();
+
+      if (!response) {
+        throw new Error("error");
+      }
+
+      const result = JSON.parse(response.partyList);
+
+      if (!Array.isArray(result)) {
+        throw new Error("error");
+      }
+
+      return result;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  public static async setPartyList(partyList: IUser[][]) {
+    try {
+      const string = JSON.stringify(partyList);
+      await updateDoc(partyListRef, { partyList: string });
+    } catch (err) {}
+  }
 }
 
 export default FirebaseService;

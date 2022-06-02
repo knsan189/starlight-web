@@ -28,8 +28,8 @@ function App() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Box display="flex">
-        <Main sidebar={sidebar} onToggleSidebar={onToggleSidebar} />
         <Sidebar open={sidebar} onClose={onToggleSidebar} />
+        <Main sidebar={sidebar} onToggleSidebar={onToggleSidebar} />
       </Box>
     </DragDropContext>
   );

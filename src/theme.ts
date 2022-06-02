@@ -5,6 +5,7 @@ const theme = createTheme({
   typography: {
     fontFamily: "Noto Sans KR, Roboto, sans-serif",
   },
+  spacing: 10,
 });
 
 export default theme;
