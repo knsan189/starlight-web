@@ -2,6 +2,8 @@ import { GetCharResponse } from "./../service/CharService";
 
 export interface IUser extends GetCharResponse {
   memo?: string;
+  id?: string;
+  createdTime: Date | string;
 }
 
 export const TYPE_STORAGE = "storage";

@@ -7,7 +7,7 @@ import {
 } from "../../@types/redux/storage.interface";
 import { IUser } from "../../@types/types";
 
-const { ADD_USER, SET_USERS } = StorageActionTypes;
+const { ADD_USER, SET_USERS, SYNC_STORAGE } = StorageActionTypes;
 
 export const addUser = (user: IUser): AddUser => ({
   type: ADD_USER,
@@ -17,6 +17,11 @@ export const addUser = (user: IUser): AddUser => ({
 export const setUsers = (users: IUser[]): SetUsers => ({
   type: SET_USERS,
   payload: { users },
+});
+
+export const syncStorage = () => ({
+  type: SYNC_STORAGE,
+  payload: {},
 });
 
 const initialState: StorageState = {
@@ -31,6 +36,9 @@ const StorageReducer = (state = initialState, action: StorageAction): StorageSta
     }
     case SET_USERS: {
       return { ...state, users: action.payload.users };
+    }
+    case SYNC_STORAGE: {
+      return { ...state, status: "loading" };
     }
     default:
       return state;

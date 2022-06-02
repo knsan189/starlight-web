@@ -1,9 +1,19 @@
+import { setUsers } from "./../reducers/storage";
 import { all, call, fork, put, select, takeLatest } from "@redux-saga/core/effects";
-import { StorageActionTypes, SyncStorage } from "../../@types/redux/storage.interface";
+import { StorageActionTypes } from "../../@types/redux/storage.interface";
+import { IUser } from "../../@types/types";
+import FirebaseService from "../../service/FireBaseService";
 
 const { SYNC_STORAGE } = StorageActionTypes;
 
-function* syncStorage({ payload }: SyncStorage) {}
+function* syncStorage() {
+  try {
+    const response: IUser[] = yield call(FirebaseService.getUserList);
+    yield put(setUsers(response));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function* syncStorageWatcher() {
   yield takeLatest(SYNC_STORAGE, syncStorage);

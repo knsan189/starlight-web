@@ -26,7 +26,6 @@ const UserDialog = ({ open, onClose }: Props) => {
   const getCharInfo = debounce(async (name) => {
     const response = await CharService.getChar(name);
     if (response) {
-      console.log(response);
       setDetails(response);
     }
   }, 1000);
@@ -38,7 +37,7 @@ const UserDialog = ({ open, onClose }: Props) => {
 
   const handleClickAdd = () => {
     if (details) {
-      dispatch(addUser(details));
+      dispatch(addUser({ ...details, createdTime: new Date() }));
     }
   };
 
