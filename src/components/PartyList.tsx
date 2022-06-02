@@ -1,16 +1,15 @@
 import React from "react";
-import { IUser } from "../@types/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/reducers";
 import Droppable from "./Droppable";
 import Party from "./Party";
 
-interface Props {
-  list: IUser[][];
-}
-const PartyList = ({ list }: Props) => {
+const PartyList = () => {
+  const { parties } = useSelector((state: RootState) => state.party);
   return (
     <Droppable droppableId="party" type="party" direction="vertical">
-      {list.map((item, index) => (
-        <Party key={index} party={item} partyIndex={index} />
+      {parties.map((party, index) => (
+        <Party key={index} party={party} partyIndex={index} />
       ))}
     </Droppable>
   );

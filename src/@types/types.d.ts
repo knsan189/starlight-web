@@ -1,7 +1,6 @@
-export interface IUser {
-  charLevel: number;
-  charName: string;
-  charClass: string;
+import { GetCharResponse } from "./../service/CharService";
+
+export interface IUser extends GetCharResponse {
   memo?: string;
 }
 

@@ -9,14 +9,15 @@ interface Props {
 }
 
 const User = ({ user, userIndex }: Props) => {
-  const { charName, charLevel, charClass } = user;
+  const { charName, charLevel, charClass, itemLevel } = user;
   return (
     <Draggable index={userIndex} draggableId={`user-${charName}`}>
-      <Card sx={{ width: 100 }}>
+      <Card sx={{ width: 200 }}>
         <CardContent>
-          <Typography variant="subtitle2">{charName}</Typography>
-          <Typography variant="body2">{charClass}</Typography>
-          <Typography variant="caption">{charLevel}</Typography>
+          <Typography variant="subtitle2">
+            {charName} / {charClass}
+          </Typography>
+          <Typography variant="body2">{itemLevel}</Typography>
         </CardContent>
       </Card>
     </Draggable>

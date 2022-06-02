@@ -2,12 +2,12 @@ import axios, { AxiosResponse } from "axios";
 import * as cheerio from "cheerio";
 
 export interface GetCharResponse {
-  itemLevel: string;
+  itemLevel: number;
   charLevel: string;
   charClass: string;
   charName: string;
   serverName: string;
-  guildName: string;
+  guildName?: string;
   loadTime: string | Date;
 }
 
@@ -15,18 +15,14 @@ export interface GetCharResponse {
 //game-info__guild
 
 class CharService {
-  public static async getChar(
-    nickname: string
-  ): Promise<GetCharResponse | null> {
+  public static async getChar(nickname: string): Promise<GetCharResponse | null> {
     try {
       const response: AxiosResponse<string> = await axios({
         method: "GET",
         url: `/char/${nickname}`,
       });
 
-      const parseHtml = response.data
-        .replace("<!DOCTYPE html>", "")
-        .replace(/\r?\n|\r/g, "");
+      const parseHtml = response.data.replace("<!DOCTYPE html>", "").replace(/\r?\n|\r/g, "");
 
       const $ = cheerio.load(parseHtml);
 
@@ -41,9 +37,7 @@ class CharService {
         .text()
         .replace(/[^0-9]/g, "");
 
-      const serverName = $(".profile-character-info__server")
-        .text()
-        .replace("@", "");
+      const serverName = $(".profile-character-info__server").text().replace("@", "");
 
       const guildName = $(".game-info__guild").text().substring(2);
 
@@ -51,7 +45,7 @@ class CharService {
 
       return {
         charClass,
-        itemLevel,
+        itemLevel: parseFloat(itemLevel),
         charLevel,
         charName: nickname,
         serverName,

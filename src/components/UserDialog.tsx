@@ -6,11 +6,12 @@ import {
   DialogActions,
   DialogContent,
   InputBase,
-  TextField,
   Typography,
 } from "@mui/material";
 import { debounce } from "lodash";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/reducers/storage";
 import CharService, { GetCharResponse } from "../service/CharService";
 
 interface Props {
@@ -20,6 +21,7 @@ interface Props {
 
 const UserDialog = ({ open, onClose }: Props) => {
   const [details, setDetails] = useState<GetCharResponse>();
+  const dispatch = useDispatch();
 
   const getCharInfo = debounce(async (name) => {
     const response = await CharService.getChar(name);
@@ -34,17 +36,19 @@ const UserDialog = ({ open, onClose }: Props) => {
     getCharInfo(value);
   };
 
+  const handleClickAdd = () => {
+    if (details) {
+      dispatch(addUser(details));
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <Box p={2} display="flex" alignItems="center" sx={{ minWidth: 500 }}>
         <Typography color="primary" sx={{ lineHeight: 0, mr: 1 }}>
           <Search />
         </Typography>
-        <InputBase
-          fullWidth
-          placeholder="닉네임 검색하기"
-          onChange={handleChange}
-        />
+        <InputBase fullWidth placeholder="닉네임 검색하기" onChange={handleChange} />
       </Box>
       <DialogContent dividers>
         {details ? (
@@ -58,7 +62,7 @@ const UserDialog = ({ open, onClose }: Props) => {
         )}
       </DialogContent>
       <DialogActions>
-        <Button>추가</Button>
+        <Button onClick={handleClickAdd}>추가</Button>
         <Button onClick={onClose}>취소</Button>
       </DialogActions>
     </Dialog>
