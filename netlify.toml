@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/proxy/*"
+  to = "https://lostark.game.onstove.com/:splat"  
+  status = 200
+  force = true
