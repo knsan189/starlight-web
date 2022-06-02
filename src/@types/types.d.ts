@@ -2,6 +2,7 @@ export interface IUser {
   charLevel: number;
   charName: string;
   charClass: string;
+  memo?: string;
 }
 
 export const TYPE_STORAGE = "storage";

@@ -4,7 +4,6 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { PARTY_LIST, USER_LIST } from "./mocks/const";
 import PartyList from "./components/PartyList";
 import { IUser } from "./@types/types";
-import Header from "./components/Header";
 import Storage from "./components/Storage";
 
 function App() {
@@ -68,9 +67,10 @@ function App() {
     },
     [partyList, userList]
   );
+
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <DragDropContext onDragEnd={handleDragEnd}>
         <Container>
           <Box pt={4}>

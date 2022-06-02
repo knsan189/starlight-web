@@ -1,14 +1,22 @@
-import { Box } from "@mui/material";
-import React from "react";
+import { Add } from "@mui/icons-material";
+import { Box, Button } from "@mui/material";
+import React, { useCallback, useState } from "react";
 import { IUser } from "../@types/types";
 import Droppable from "./Droppable";
 import User from "./User";
+import UserDialog from "./UserDialog";
 
 interface Props {
   userList: IUser[];
 }
 
 const Storage = ({ userList }: Props) => {
+  const [dialog, toggleDialog] = useState(false);
+
+  const onToggleDialog = useCallback(() => {
+    toggleDialog((prev) => !prev);
+  }, []);
+
   return (
     <Box>
       <Droppable droppableId="storage" type="user" direction="vertical">
@@ -18,6 +26,10 @@ const Storage = ({ userList }: Props) => {
           </Box>
         ))}
       </Droppable>
+      <Button variant="outlined" onClick={onToggleDialog}>
+        <Add />
+      </Button>
+      <UserDialog open={dialog} onClose={onToggleDialog} />
     </Box>
   );
 };
