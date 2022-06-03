@@ -51,6 +51,7 @@ const UserDialog = ({ open, onClose }: Props) => {
     if (details) {
       dispatch(addUser({ ...details, createdTime: new Date() }));
     }
+    handleClose();
   };
 
   const handleClose = () => {

@@ -25,9 +25,9 @@ const Sidebar = ({ open, onClose }: Props) => {
       open={open}
       onClose={onClose}
       sx={{
-        width: "20rem",
+        width: "22rem",
         "& .MuiDrawer-paper": {
-          width: "20rem",
+          width: "22rem",
         },
       }}
     >
