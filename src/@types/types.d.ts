@@ -1,6 +1,7 @@
 import { GetCharResponse } from "./../service/CharService";
 
 export interface IUser extends GetCharResponse {
+  [key: string];
   memo?: string;
   id?: string;
   createdTime: Date | string;

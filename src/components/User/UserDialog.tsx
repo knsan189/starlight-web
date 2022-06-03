@@ -49,7 +49,7 @@ const UserDialog = ({ open, onClose }: Props) => {
 
   const handleClickAdd = () => {
     if (details) {
-      dispatch(addUser({ ...details, createdTime: new Date() }));
+      dispatch(addUser({ ...details, createdTime: new Date().toISOString() }));
     }
     handleClose();
   };

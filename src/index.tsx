@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import "./global.css";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import { Provider } from "react-redux";
@@ -15,5 +16,5 @@ ReactDOM.render(
       </Provider>
     </ThemeProvider>
   </React.StrictMode>,
-  document.getElementById("root") as HTMLElement
+  document.getElementById("root") as HTMLElement,
 );

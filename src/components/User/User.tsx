@@ -55,7 +55,9 @@ const matchImage = (text: string): string => {
 };
 
 const User = ({ user, userIndex, type }: Props) => {
-  const { charName, charLevel, charClass, itemLevel } = user;
+  const { charName, charLevel, charClass, itemLevel, createdTime } = user;
+  console.log(createdTime);
+
   return (
     <Draggable index={userIndex} draggableId={`user-${charName}`} type={type}>
       <Card>
