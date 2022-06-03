@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, Divider } from "@mui/material";
 import React from "react";
-import { IUser } from "../@types/types";
-import Draggable from "./Draggable";
-import UserList from "./UserList";
+import { IUser } from "../../@types/types";
+import Draggable from "../Draggable";
+import UserList from "../User/UserList";
 
 interface Props {
   party: IUser[];

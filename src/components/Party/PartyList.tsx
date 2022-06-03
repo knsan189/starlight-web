@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducers";
-import Droppable from "./Droppable";
+import { RootState } from "../../redux/reducers";
+import Droppable from "../Droppable";
 import Party from "./Party";
 
 const PartyList = () => {

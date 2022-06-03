@@ -1,8 +1,8 @@
 import { MoreVert } from "@mui/icons-material";
 import { Avatar, Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
 import React from "react";
-import { DropType, IUser } from "../@types/types";
-import Draggable from "./Draggable";
+import { DropType, IUser } from "../../@types/types";
+import Draggable from "../Draggable";
 
 interface Props {
   user: IUser;

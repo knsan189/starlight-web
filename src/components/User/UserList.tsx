@@ -1,6 +1,6 @@
 import React from "react";
-import { IUser } from "../@types/types";
-import Droppable from "./Droppable";
+import { IUser } from "../../@types/types";
+import Droppable from "../Droppable";
 import User from "./User";
 
 interface Props {

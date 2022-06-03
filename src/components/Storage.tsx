@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { IUser } from "../@types/types";
 import { RootState } from "../redux/reducers";
 import Droppable from "./Droppable";
-import User from "./User";
+import User from "./User/User";
 
 const Storage = () => {
   const { users } = useSelector((state: RootState) => state.storage);

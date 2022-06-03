@@ -6,19 +6,18 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { addParty } from "../redux/reducers/party";
 import FirebaseService from "../service/FireBaseService";
-import PartyList from "./PartyList";
+import PartyList from "./Party/PartyList";
 
 const PartyLayout = styled(Box)<{ sidebar: boolean }>(({ theme, sidebar }) => ({
   background: theme.palette.grey[100],
   minHeight: "100vh",
-  width: "82%",
   padding: theme.spacing(3),
   flexGrow: 1,
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  marginLeft: `-18%`,
+  marginLeft: `20rem`,
   ...(sidebar && {
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.easeOut,

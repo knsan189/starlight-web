@@ -2,8 +2,8 @@ import { Add } from "@mui/icons-material";
 import { Box, Button, Drawer, TextField, Typography } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import Storage from "./Storage";
-import UserDialog from "./UserDialog";
-import UserSeachbar from "./UserSeachbar";
+import UserDialog from "./User/UserDialog";
+import UserSeachbar from "./User/UserSeachbar";
 
 interface Props {
   open: boolean;
@@ -25,9 +25,9 @@ const Sidebar = ({ open, onClose }: Props) => {
       open={open}
       onClose={onClose}
       sx={{
-        width: "18%",
+        width: "20rem",
         "& .MuiDrawer-paper": {
-          width: "18%",
+          width: "20rem",
         },
       }}
     >

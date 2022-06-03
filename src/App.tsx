@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Container, Box, Button, Divider, styled } from "@mui/material";
+import { Box } from "@mui/material";
 import { DragDropContext } from "react-beautiful-dnd";
-import PartyList from "./components/PartyList";
-import Storage from "./components/Storage";
 import useDragDrop from "./hooks/useDragDrop";
 import { useDispatch } from "react-redux";
 import { syncStorage } from "./redux/reducers/storage";
-import FirebaseService from "./service/FireBaseService";
 import Sidebar from "./components/Sidebar";
 import Main from "./components/Main";
 
