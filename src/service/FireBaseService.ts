@@ -25,7 +25,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const userListRef = doc(db, "storage", "userList");
-const partyListRef = doc(db, "storage", "partyList");
+
+type PartyList = IUser[][];
+
+export const KOKOU = "kokou";
+export const KAYANG = "kayang";
+export const ABREL = "abrel";
+
+export type PartyTypes = "kokou" | "kayang" | "abrel";
 
 class FirebaseService {
   public static async getUserList(): Promise<IUser[] | null> {
@@ -42,37 +49,58 @@ class FirebaseService {
     }
   }
 
-  public static async setUserList(userList: IUser[]) {
-    try {
-      await updateDoc(userListRef, { userList });
-    } catch (err) {}
+  public static setUserList(userList: IUser[]) {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          await updateDoc(userListRef, { userList });
+          resolve("success");
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    });
   }
 
-  public static async getPartyList(): Promise<IUser[][] | null> {
-    try {
-      const response = (await getDoc(partyListRef)).data();
+  public static async getPartyList(type: PartyTypes): Promise<PartyList | null> {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          const ref = doc(db, "party", type);
+          const response = (await getDoc(ref)).data();
 
-      if (!response) {
-        throw new Error("error");
-      }
+          if (!response?.list) {
+            resolve(null);
+            return;
+          }
 
-      const result = JSON.parse(response.partyList);
+          const result = JSON.parse(response.list);
 
-      if (!Array.isArray(result)) {
-        throw new Error("error");
-      }
+          if (!Array.isArray(result)) {
+            throw new Error("error");
+          }
 
-      return result;
-    } catch (error) {
-      return null;
-    }
+          resolve(result);
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    });
   }
 
-  public static async setPartyList(partyList: IUser[][]) {
-    try {
-      const string = JSON.stringify(partyList);
-      await updateDoc(partyListRef, { partyList: string });
-    } catch (err) {}
+  public static async setPartyList(partyList: PartyList, type: PartyTypes) {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          const ref = doc(db, "party", type);
+          const string = JSON.stringify(partyList);
+          await updateDoc(ref, { list: string });
+          resolve("success");
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    });
   }
 }
 

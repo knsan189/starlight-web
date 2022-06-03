@@ -1,12 +1,13 @@
 import { Save } from "@mui/icons-material";
-import { Box, Button, Divider, styled, Typography } from "@mui/material";
-import React from "react";
+import { Box, Button, Divider, styled } from "@mui/material";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { addParty } from "../redux/reducers/party";
-import FirebaseService from "../service/FireBaseService";
+import { ABREL, KAYANG, KOKOU } from "../service/FireBaseService";
 import PartyList from "./Party/PartyList";
+import PartyTab from "./Party/PartyTab";
 
 const PartyLayout = styled(Box)<{ sidebar: boolean }>(({ theme, sidebar }) => ({
   background: theme.palette.grey[100],
@@ -32,33 +33,46 @@ interface Props {
   onToggleSidebar: () => void;
 }
 
-const Main = ({ sidebar, onToggleSidebar }: Props) => {
-  const { users } = useSelector((state: RootState) => state.storage);
-  const { parties } = useSelector((state: RootState) => state.party);
-  const dispatch = useDispatch();
+interface TabPanelProps {
+  children: React.ReactNode;
+  index: number;
+  value: number;
+}
 
-  const handleClickSave = async () => {
-    await FirebaseService.setUserList(users);
-    await FirebaseService.setPartyList(parties);
-    console.log("success");
-  };
+const TabPanel = ({ children, index, value }: TabPanelProps) => {
+  if (index !== value) return null;
+  return <Box>{children}</Box>;
+};
+
+const Main = ({ sidebar, onToggleSidebar }: Props) => {
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+
+  const dispatch = useDispatch();
 
   const handleClickAdd = () => {
     dispatch(addParty());
   };
 
+  const onChangeTabIndex = useCallback(
+    (event: React.SyntheticEvent, index: number) => {
+      if (activeTabIndex === index) return;
+      setActiveTabIndex(index);
+    },
+    [activeTabIndex],
+  );
+
   return (
     <PartyLayout sidebar={sidebar}>
-      <Box pb={2} display="flex" justifyContent="space-between">
-        <Typography variant="h6">쿠크세이튼 파티</Typography>
-        <Button variant="contained" onClick={handleClickSave}>
-          저장하기
-        </Button>
-      </Box>
-      <Divider />
-      <Box pt={2}>
-        <PartyList />
-      </Box>
+      <PartyTab value={activeTabIndex} onChange={onChangeTabIndex} />
+      <TabPanel index={0} value={activeTabIndex}>
+        <PartyList type={KOKOU} />
+      </TabPanel>
+      <TabPanel index={1} value={activeTabIndex}>
+        <PartyList type={KAYANG} />
+      </TabPanel>
+      <TabPanel index={2} value={activeTabIndex}>
+        <PartyList type={ABREL} />
+      </TabPanel>
       <Button variant="outlined" onClick={handleClickAdd}>
         파티 추가하기
       </Button>

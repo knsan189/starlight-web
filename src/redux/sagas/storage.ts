@@ -10,10 +10,7 @@ const { SYNC_STORAGE } = StorageActionTypes;
 function* syncStorage() {
   try {
     const userList: IUser[] | null = yield call(FirebaseService.getUserList);
-    const partyList: IUser[][] | null = yield call(FirebaseService.getPartyList);
-
     if (userList) yield put(setUsers(userList));
-    if (partyList) yield put(setParties(partyList));
   } catch (error) {
     console.log(error);
   }
