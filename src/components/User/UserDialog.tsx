@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/reducers/storage";
 import CharService, { GetCharResponse } from "../../service/CharService";
+import UserService from "../../service/UserService";
 import UserDetails from "./UserDetails";
 
 interface Props {
@@ -39,7 +40,7 @@ const UserDialog = ({ open, onClose }: Props) => {
     }
     setDetails(response);
     toggleLoading(false);
-  }, 800);
+  }, 1000);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     toggleLoading(true);
@@ -47,7 +48,7 @@ const UserDialog = ({ open, onClose }: Props) => {
     getCharInfo(value);
   };
 
-  const handleClickAdd = () => {
+  const handleClickAdd = async () => {
     if (details) {
       dispatch(addUser({ ...details, createdTime: new Date().toISOString() }));
     }

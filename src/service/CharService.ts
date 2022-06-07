@@ -14,14 +14,14 @@ export interface GetCharResponse {
 //profile-character-info__server
 //game-info__guild
 
-const PROXY = process.env.NODE_ENV === "production" ? "/proxy" : "";
+const url = process.env.NODE_ENV === "development" ? "http://localhost:8001" : "";
 
 class CharService {
   public static async getChar(nickname: string): Promise<GetCharResponse | null> {
     try {
       const response: AxiosResponse<string> = await axios({
         method: "GET",
-        url: `${PROXY}/Profile/Character/${nickname}`,
+        url: `${url}/api/proxy/Profile/Character/${nickname}`,
       });
 
       const parseHtml = response.data.replace("<!DOCTYPE html>", "").replace(/\r?\n|\r/g, "");

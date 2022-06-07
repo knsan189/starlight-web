@@ -56,10 +56,9 @@ const matchImage = (text: string): string => {
 
 const User = ({ user, userIndex, type }: Props) => {
   const { charName, charLevel, charClass, itemLevel, createdTime } = user;
-  console.log(createdTime);
 
   return (
-    <Draggable index={userIndex} draggableId={`user-${charName}`} type={type}>
+    <Draggable index={userIndex} draggableId={`${type}-${charName}`} type={type}>
       <Card>
         <CardHeader
           avatar={<Avatar src={`/images/${matchImage(charClass)}.png`}></Avatar>}

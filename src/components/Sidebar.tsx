@@ -59,7 +59,7 @@ const Sidebar = ({ open, onClose }: Props) => {
       if (typeof a[type] === "string") {
         return a[type] < b[type] ? -1 : a[type] > b[type] ? 1 : 0;
       }
-      return a[type] - b[type];
+      return b[type] - a[type];
     });
     dispatch(setUsers(newUsers));
   };

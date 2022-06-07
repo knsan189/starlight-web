@@ -1,4 +1,6 @@
+import { Camera, PhotoCamera } from "@mui/icons-material";
 import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
+
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
@@ -7,11 +9,12 @@ import FirebaseService, { ABREL, KAYANG, KOKOU, PartyTypes } from "../../service
 interface Props {
   value: number;
   onChange: (event: React.SyntheticEvent, index: number) => void;
+  onScreenShot: () => void;
 }
 
 const types = [KOKOU, KAYANG, ABREL];
 
-const PartyTab = ({ value, onChange }: Props) => {
+const PartyTab = ({ value, onChange, onScreenShot }: Props) => {
   const { users } = useSelector((state: RootState) => state.storage);
   const { parties } = useSelector((state: RootState) => state.party);
 
@@ -27,9 +30,14 @@ const PartyTab = ({ value, onChange }: Props) => {
         <Tab label="카양겔" />
         <Tab label="아브렐슈드" />
       </Tabs>
-      <Button variant="contained" onClick={handleClickSave}>
-        저장하기
-      </Button>
+      <Box>
+        <Button variant="contained" onClick={onScreenShot} color="secondary" sx={{ mr: 1 }}>
+          <PhotoCamera />
+        </Button>
+        <Button variant="contained" onClick={handleClickSave}>
+          저장하기
+        </Button>
+      </Box>
     </Box>
   );
 };

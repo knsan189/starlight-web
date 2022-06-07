@@ -1,15 +1,17 @@
 import { Save } from "@mui/icons-material";
-import { Box, Button, Divider, styled } from "@mui/material";
+import { Box, Button, Divider, linkClasses, styled } from "@mui/material";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/reducers";
+import * as htmlToImage from "html-to-image";
 import { addParty } from "../redux/reducers/party";
 import { ABREL, KAYANG, KOKOU } from "../service/FireBaseService";
 import PartyList from "./Party/PartyList";
 import PartyTab from "./Party/PartyTab";
+import html2canvas from "html2canvas";
 
-const PartyLayout = styled(Box)<{ sidebar: boolean }>(({ theme, sidebar }) => ({
+const PartyLayout = styled(Box, { shouldForwardProp: (prop) => prop !== "sidebar" })<{
+  sidebar: boolean;
+}>(({ theme, sidebar }) => ({
   background: theme.palette.grey[100],
   minHeight: "100vh",
   padding: theme.spacing(3),
@@ -41,7 +43,7 @@ interface TabPanelProps {
 
 const TabPanel = ({ children, index, value }: TabPanelProps) => {
   if (index !== value) return null;
-  return <Box>{children}</Box>;
+  return <Box id={`party-${index}`}>{children}</Box>;
 };
 
 const Main = ({ sidebar, onToggleSidebar }: Props) => {
@@ -61,9 +63,20 @@ const Main = ({ sidebar, onToggleSidebar }: Props) => {
     [activeTabIndex],
   );
 
+  const onScreenShot = useCallback(async () => {
+    const element = document.getElementById(`party-${activeTabIndex}`);
+    if (element) {
+      const response = await html2canvas(element);
+      const link = document.createElement("a");
+      link.download = "파티.jpeg";
+      link.href = response.toDataURL("image/jpeg");
+      link.click();
+    }
+  }, [activeTabIndex]);
+
   return (
     <PartyLayout sidebar={sidebar}>
-      <PartyTab value={activeTabIndex} onChange={onChangeTabIndex} />
+      <PartyTab value={activeTabIndex} onChange={onChangeTabIndex} onScreenShot={onScreenShot} />
       <TabPanel index={0} value={activeTabIndex}>
         <PartyList type={KOKOU} />
       </TabPanel>

@@ -35,16 +35,16 @@ const useDragDrop = () => {
             const targetUserIndex = destination.index;
             newPartyList[targetPartyIndex].splice(targetUserIndex, 0, target);
           } else if (destination.droppableId === "storage") {
-            const newUserList = [...users];
-            newUserList.splice(destination.index, 0, target);
-            dispatch(setUsers(newUserList));
+            // const newUserList = [...users];
+            // newUserList.splice(destination.index, 0, target);
+            // dispatch(setUsers(newUserList));
           }
           dispatch(setParties(newPartyList));
         } else if (source.droppableId === "storage") {
-          const newUserList = [...users];
-          const [target] = newUserList.splice(source.index, 1);
+          const target = users[source.index];
           if (destination.droppableId === "storage") {
-            newUserList.splice(destination.index, 0, target);
+            // newUserList.splice(destination.index, 0, target);
+            return;
           } else if (destination.droppableId.includes("party")) {
             const targetPartyIndex = parseInt(destination.droppableId.replace(`party-`, ""), 10);
             const targetUserIndex = destination.index;
@@ -52,7 +52,6 @@ const useDragDrop = () => {
             newPartyList[targetPartyIndex].splice(targetUserIndex, 0, target);
             dispatch(setParties(newPartyList));
           }
-          dispatch(setUsers(newUserList));
         }
       }
     },

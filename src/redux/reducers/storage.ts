@@ -31,12 +31,10 @@ const initialState: StorageState = {
 
 const StorageReducer = (state = initialState, action: StorageAction): StorageState => {
   switch (action.type) {
-    case ADD_USER: {
-      return { ...state, users: [...state.users, action.payload.user] };
-    }
     case SET_USERS: {
-      return { ...state, users: action.payload.users };
+      return { ...state, users: action.payload.users, status: "ok" };
     }
+    case ADD_USER:
     case SYNC_STORAGE: {
       return { ...state, status: "loading" };
     }
