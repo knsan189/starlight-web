@@ -1,8 +1,9 @@
 import { MoreVert } from "@mui/icons-material";
 import { Avatar, Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
-import React from "react";
+import React, { MouseEventHandler, useCallback, useState } from "react";
 import { DropType, IUser } from "../../@types/types";
 import Draggable from "../Draggable";
+import UserMenu from "./UserMenu";
 
 interface Props {
   user: IUser;
@@ -55,7 +56,13 @@ const matchImage = (text: string): string => {
 };
 
 const User = ({ user, userIndex, type }: Props) => {
+  const [menu, toggleMenu] = useState<EventTarget>();
+
   const { charName, charLevel, charClass, itemLevel, createdTime } = user;
+
+  const onToggleMenu: MouseEventHandler<HTMLButtonElement> = useCallback((event) => {
+    toggleMenu((prev) => (prev ? undefined : event.target));
+  }, []);
 
   return (
     <Draggable index={userIndex} draggableId={`${type}-${charName}`} type={type}>
@@ -66,7 +73,7 @@ const User = ({ user, userIndex, type }: Props) => {
           titleTypographyProps={{ variant: "subtitle2" }}
           subheader={`${itemLevel}, ${charClass}`}
           action={
-            <IconButton>
+            <IconButton onClick={onToggleMenu}>
               <MoreVert />
             </IconButton>
           }
@@ -77,6 +84,7 @@ const User = ({ user, userIndex, type }: Props) => {
           </Typography>
           <Typography variant="body2">{itemLevel}</Typography>
         </CardContent> */}
+        <UserMenu user={user} menu={menu} onClose={onToggleMenu} />
       </Card>
     </Draggable>
   );

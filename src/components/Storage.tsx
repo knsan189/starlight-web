@@ -11,6 +11,7 @@ interface Props {
 }
 const Storage = ({ searchList }: Props) => {
   const { users } = useSelector((state: RootState) => state.storage);
+  console.log(users);
   const result = searchList ? searchList : users;
 
   return (
