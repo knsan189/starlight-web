@@ -10,7 +10,7 @@ import { removeMember } from "../../redux/reducers/party";
 interface Props {
   user: IUser;
   menu?: EventTarget;
-  onClose: (event: any) => void;
+  onClose: (event?: any) => void;
   onToggleDialog: () => void;
   type: DropType;
 }
@@ -21,10 +21,12 @@ const UserMenu = ({ user, menu, onClose, onToggleDialog, type }: Props) => {
     if (type === "user") {
       dispatch(removeMember(user));
     }
+    onClose();
   };
 
   const handleEdit = () => {
     onToggleDialog();
+    onClose();
   };
 
   return (

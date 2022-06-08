@@ -1,17 +1,30 @@
-import { Autocomplete, Box, Chip, Divider, Paper, TextField, Typography } from "@mui/material";
+import { Sync } from "@mui/icons-material";
+import {
+  Autocomplete,
+  Box,
+  Chip,
+  Divider,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { ChangeEvent, ChangeEventHandler } from "react";
 import { GetCharResponse } from "../../service/CharService";
+import { getFormattedTime } from "../../utils/timeUtil";
 
 interface Props {
   form: {
-    tags: string[];
-    memo: string;
+    tags: string[] | undefined;
+    memo: string | undefined;
   };
   details?: GetCharResponse;
+  editMode: boolean;
   onChange: (name: string, value: any) => void;
+  onUpdate: () => void;
 }
 
-const UserDetails = ({ details, form, onChange }: Props) => {
+const UserDetails = ({ details, form, editMode, onChange, onUpdate }: Props) => {
   if (!details)
     return (
       <Box p={2} height={200}>
@@ -19,7 +32,7 @@ const UserDetails = ({ details, form, onChange }: Props) => {
       </Box>
     );
 
-  const { serverName, charClass, itemLevel, guildName, charLevel } = details;
+  const { serverName, charClass, itemLevel, guildName, charLevel, loadTime } = details;
   const { tags, memo } = form;
 
   const handleChangeMemo: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -30,9 +43,19 @@ const UserDetails = ({ details, form, onChange }: Props) => {
     onChange("tags", newValue);
   };
 
+  const fomattedTime = getFormattedTime(new Date(loadTime));
+
   return (
     <Box>
       <Box sx={{ bgcolor: (theme) => theme.palette.grey[100], p: 2 }}>
+        {editMode && (
+          <Box pb={1} display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="body2">정보 최신일 : {fomattedTime}</Typography>
+            <IconButton size="small" onClick={onUpdate}>
+              <Sync fontSize="small" />
+            </IconButton>
+          </Box>
+        )}
         <Paper>
           <Box p={1} display="flex" justifyContent="space-between">
             <Typography variant="body2">서버</Typography>
@@ -66,7 +89,7 @@ const UserDetails = ({ details, form, onChange }: Props) => {
           <Typography gutterBottom variant="subtitle2">
             메모추가
           </Typography>
-          <TextField fullWidth size="small" multiline onChange={handleChangeMemo} />
+          <TextField fullWidth size="small" multiline onChange={handleChangeMemo} value={memo} />
         </Box>
 
         <Box pt={1}>

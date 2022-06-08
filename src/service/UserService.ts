@@ -36,6 +36,26 @@ class UserService {
       })();
     });
   }
+
+  public static editMember(charName: string, user: IUser) {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          const response = await axios({
+            method: "put",
+            url: `${url}/api/members`,
+            params: {
+              charName,
+              user,
+            },
+          });
+          resolve(response.data);
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    });
+  }
 }
 
 export default UserService;

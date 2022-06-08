@@ -1,5 +1,5 @@
 import { MoreVert } from "@mui/icons-material";
-import { Avatar, Card, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
+import { Avatar, Card, CardHeader, IconButton, Chip, Box } from "@mui/material";
 import React, { MouseEventHandler, useCallback, useState } from "react";
 import { DropType, IUser } from "../../@types/types";
 import Draggable from "../Draggable";
@@ -84,6 +84,11 @@ const User = ({ user, userIndex, type }: Props) => {
             </IconButton>
           }
         />
+        <Box px={1} pb={2}>
+          {user.tags?.map((tag) => (
+            <Chip label={tag} sx={{ mr: 0.5 }} />
+          ))}
+        </Box>
         <UserMenu
           user={user}
           menu={menu}
@@ -91,7 +96,7 @@ const User = ({ user, userIndex, type }: Props) => {
           onClose={onToggleMenu}
           onToggleDialog={onToggleDialog}
         />
-        <UserDialog open={dialog} onClose={onToggleDialog} mode="edit" />
+        <UserDialog open={dialog} onClose={onToggleDialog} mode="edit" user={user} />
       </Card>
     </Draggable>
   );
