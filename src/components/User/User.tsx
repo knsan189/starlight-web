@@ -3,6 +3,7 @@ import { Avatar, Card, CardContent, CardHeader, IconButton, Typography } from "@
 import React, { MouseEventHandler, useCallback, useState } from "react";
 import { DropType, IUser } from "../../@types/types";
 import Draggable from "../Draggable";
+import UserDialog from "./UserDialog";
 import UserMenu from "./UserMenu";
 
 interface Props {
@@ -57,11 +58,16 @@ const matchImage = (text: string): string => {
 
 const User = ({ user, userIndex, type }: Props) => {
   const [menu, toggleMenu] = useState<EventTarget>();
+  const [dialog, toggleDialog] = useState(false);
 
   const { charName, charLevel, charClass, itemLevel, createdTime } = user;
 
   const onToggleMenu: MouseEventHandler<HTMLButtonElement> = useCallback((event) => {
     toggleMenu((prev) => (prev ? undefined : event.target));
+  }, []);
+
+  const onToggleDialog = useCallback(() => {
+    toggleDialog((prev) => !prev);
   }, []);
 
   return (
@@ -78,13 +84,14 @@ const User = ({ user, userIndex, type }: Props) => {
             </IconButton>
           }
         />
-        {/* <CardContent>
-          <Typography variant="subtitle2">
-            {charName} / {charClass}
-          </Typography>
-          <Typography variant="body2">{itemLevel}</Typography>
-        </CardContent> */}
-        <UserMenu user={user} menu={menu} onClose={onToggleMenu} />
+        <UserMenu
+          user={user}
+          menu={menu}
+          type={type}
+          onClose={onToggleMenu}
+          onToggleDialog={onToggleDialog}
+        />
+        <UserDialog open={dialog} onClose={onToggleDialog} mode="edit" />
       </Card>
     </Draggable>
   );

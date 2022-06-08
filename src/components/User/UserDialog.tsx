@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import { debounce } from "lodash";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addUser } from "../../redux/reducers/storage";
 import CharService, { GetCharResponse } from "../../service/CharService";
@@ -25,11 +25,13 @@ import UserDetails from "./UserDetails";
 interface Props {
   open: boolean;
   onClose: () => void;
+  mode: "create" | "edit";
 }
 
-const UserDialog = ({ open, onClose }: Props) => {
+const UserDialog = ({ open, onClose, mode }: Props) => {
   const [details, setDetails] = useState<GetCharResponse>();
   const [loading, toggleLoading] = useState(false);
+  const [form, setForm] = useState({ tags: [], memo: "" });
   const dispatch = useDispatch();
 
   const getCharInfo = debounce(async (name) => {
@@ -50,7 +52,7 @@ const UserDialog = ({ open, onClose }: Props) => {
 
   const handleClickAdd = async () => {
     if (details) {
-      dispatch(addUser({ ...details, createdTime: new Date().toISOString() }));
+      dispatch(addUser({ ...details, ...form }));
     }
     handleClose();
   };
@@ -58,7 +60,12 @@ const UserDialog = ({ open, onClose }: Props) => {
   const handleClose = () => {
     onClose();
     setDetails(undefined);
+    setForm({ tags: [], memo: "" });
   };
+
+  const onChangeForm = useCallback((name: string, value: any) => {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   return (
     <Dialog open={open} onClose={onClose} closeAfterTransition>
@@ -70,7 +77,7 @@ const UserDialog = ({ open, onClose }: Props) => {
       </Box>
       <DialogContent dividers sx={{ p: 0 }}>
         {!loading ? (
-          <UserDetails details={details} />
+          <UserDetails form={form} details={details} onChange={onChangeForm} />
         ) : (
           <Box height={200} display="flex" justifyContent="center" alignItems="center">
             <CircularProgress />

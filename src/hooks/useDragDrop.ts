@@ -8,7 +8,7 @@ import { setUsers } from "../redux/reducers/storage";
 
 const useDragDrop = () => {
   const { parties } = useSelector((state: RootState) => state.party);
-  const { users } = useSelector((state: RootState) => state.storage);
+  const { users, searchList } = useSelector((state: RootState) => state.storage);
 
   const dispatch = useDispatch();
 
@@ -41,7 +41,7 @@ const useDragDrop = () => {
           }
           dispatch(setParties(newPartyList));
         } else if (source.droppableId === "storage") {
-          const target = users[source.index];
+          const target = searchList ? searchList[source.index] : users[source.index];
           if (destination.droppableId === "storage") {
             // newUserList.splice(destination.index, 0, target);
             return;
@@ -55,7 +55,7 @@ const useDragDrop = () => {
         }
       }
     },
-    [users, parties, dispatch],
+    [users, parties, searchList, dispatch],
   );
 
   return { onDragEnd };

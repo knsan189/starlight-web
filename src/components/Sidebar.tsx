@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { IUser } from "../@types/types";
 import { RootState } from "../redux/reducers";
-import { setUsers } from "../redux/reducers/storage";
+import { setSearchList, setUsers } from "../redux/reducers/storage";
 import Storage from "./Storage";
 import UserDialog from "./User/UserDialog";
 import UserSeachbar from "./User/UserSeachbar";
@@ -17,8 +17,7 @@ interface Props {
 }
 const Sidebar = ({ open, onClose }: Props) => {
   const [dialog, toggleDialog] = useState(false);
-  const [searchList, setSearchList] = useState<IUser[]>();
-  const { users } = useSelector((state: RootState) => state.storage);
+  const { users, searchList } = useSelector((state: RootState) => state.storage);
   const dispatch = useDispatch();
 
   const onToggleDialog = useCallback(() => {
@@ -38,20 +37,18 @@ const Sidebar = ({ open, onClose }: Props) => {
       }
     });
 
-    setSearchList(newSearchList);
+    dispatch(setSearchList(newSearchList));
   }, 500);
 
   const onChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = event.target.value;
-
       if (!inputValue) {
-        setSearchList(undefined);
+        dispatch(setSearchList(undefined));
       }
-
       delayQuery(inputValue);
     },
-    [delayQuery],
+    [delayQuery, dispatch],
   );
 
   const handleClickSort = (type: keyof IUser) => () => {
@@ -98,7 +95,7 @@ const Sidebar = ({ open, onClose }: Props) => {
       <Box pl={3} pr={2}>
         <Storage searchList={searchList} />
       </Box>
-      <UserDialog open={dialog} onClose={onToggleDialog} />
+      <UserDialog open={dialog} onClose={onToggleDialog} mode="create" />
     </Drawer>
   );
 };

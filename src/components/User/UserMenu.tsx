@@ -1,27 +1,48 @@
 import React from "react";
 import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-import { Close, Search } from "@mui/icons-material";
+import { Close, Delete, Person, Search } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
-import { IUser } from "../../@types/types";
+import { DropType, IUser } from "../../@types/types";
 import { useDispatch } from "react-redux";
+import { removeMember } from "../../redux/reducers/party";
 
 interface Props {
   user: IUser;
   menu?: EventTarget;
   onClose: (event: any) => void;
+  onToggleDialog: () => void;
+  type: DropType;
 }
-const UserMenu = ({ user, menu, onClose }: Props) => {
+const UserMenu = ({ user, menu, onClose, onToggleDialog, type }: Props) => {
   const dispatch = useDispatch();
-  const handleDelete = () => {};
+
+  const handleDelete = () => {
+    if (type === "user") {
+      dispatch(removeMember(user));
+    }
+  };
+
+  const handleEdit = () => {
+    onToggleDialog();
+  };
 
   return (
     <Menu anchorEl={menu as Element} open={Boolean(menu)} onClose={onClose} autoFocus={false}>
       <MenuItem onClick={handleDelete}>
         <ListItemIcon>
-          <Close fontSize="small" color="warning" />
+          <Delete fontSize="small" color="warning" />
         </ListItemIcon>
-        <ListItemText primary="파티 추방" primaryTypographyProps={{ variant: "body2" }} />
+        <ListItemText
+          primary={type === "user" ? "파티 추방" : "유저 삭제"}
+          primaryTypographyProps={{ variant: "body2" }}
+        />
+      </MenuItem>
+      <MenuItem onClick={handleEdit}>
+        <ListItemIcon>
+          <Person fontSize="small" />
+        </ListItemIcon>
+        <ListItemText primary="유저 정보 수정" primaryTypographyProps={{ variant: "body2" }} />
       </MenuItem>
     </Menu>
   );

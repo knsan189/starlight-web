@@ -1,12 +1,17 @@
-import { Box, Divider, Paper, TextField, Typography } from "@mui/material";
-import React from "react";
+import { Autocomplete, Box, Chip, Divider, Paper, TextField, Typography } from "@mui/material";
+import React, { ChangeEvent, ChangeEventHandler } from "react";
 import { GetCharResponse } from "../../service/CharService";
 
 interface Props {
+  form: {
+    tags: string[];
+    memo: string;
+  };
   details?: GetCharResponse;
+  onChange: (name: string, value: any) => void;
 }
 
-const UserDetails = ({ details }: Props) => {
+const UserDetails = ({ details, form, onChange }: Props) => {
   if (!details)
     return (
       <Box p={2} height={200}>
@@ -15,6 +20,15 @@ const UserDetails = ({ details }: Props) => {
     );
 
   const { serverName, charClass, itemLevel, guildName, charLevel } = details;
+  const { tags, memo } = form;
+
+  const handleChangeMemo: ChangeEventHandler<HTMLInputElement> = (event) => {
+    onChange("memo", event.target.value);
+  };
+
+  const handleChangeTag = (e: any, newValue: any) => {
+    onChange("tags", newValue);
+  };
 
   return (
     <Box>
@@ -48,10 +62,30 @@ const UserDetails = ({ details }: Props) => {
       </Box>
       <Divider />
       <Box p={2}>
-        <Typography gutterBottom variant="body2">
-          메모추가
-        </Typography>
-        <TextField fullWidth size="small" multiline />
+        <Box>
+          <Typography gutterBottom variant="subtitle2">
+            메모추가
+          </Typography>
+          <TextField fullWidth size="small" multiline onChange={handleChangeMemo} />
+        </Box>
+
+        <Box pt={1}>
+          <Typography gutterBottom variant="subtitle2">
+            태그추가
+          </Typography>
+          <Autocomplete
+            freeSolo
+            multiple
+            size="small"
+            options={[]}
+            value={tags || []}
+            onChange={handleChangeTag}
+            renderInput={(params) => <TextField {...params} size="small" />}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => <Chip label={option} {...getTagProps({ index })} />)
+            }
+          />
+        </Box>
       </Box>
     </Box>
   );

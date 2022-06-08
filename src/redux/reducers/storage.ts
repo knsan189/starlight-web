@@ -1,5 +1,6 @@
 import {
   AddUser,
+  SetSearchList,
   SetUsers,
   StorageAction,
   StorageActionTypes,
@@ -7,7 +8,7 @@ import {
 } from "../../@types/redux/storage.interface";
 import { IUser } from "../../@types/types";
 
-const { ADD_USER, SET_USERS, SYNC_STORAGE } = StorageActionTypes;
+const { ADD_USER, SET_USERS, SYNC_STORAGE, SET_SEARCH_LIST } = StorageActionTypes;
 
 export const addUser = (user: IUser): AddUser => ({
   type: ADD_USER,
@@ -19,6 +20,11 @@ export const setUsers = (users: IUser[]): SetUsers => ({
   payload: { users },
 });
 
+export const setSearchList = (searchList?: IUser[]): SetSearchList => ({
+  type: SET_SEARCH_LIST,
+  payload: { searchList },
+});
+
 export const syncStorage = () => ({
   type: SYNC_STORAGE,
   payload: {},
@@ -26,6 +32,7 @@ export const syncStorage = () => ({
 
 const initialState: StorageState = {
   users: [],
+  searchList: undefined,
   status: "ok",
 };
 
@@ -34,6 +41,8 @@ const StorageReducer = (state = initialState, action: StorageAction): StorageSta
     case SET_USERS: {
       return { ...state, users: action.payload.users, status: "ok" };
     }
+    case SET_SEARCH_LIST:
+      return { ...state, searchList: action.payload.searchList };
     case ADD_USER:
     case SYNC_STORAGE: {
       return { ...state, status: "loading" };

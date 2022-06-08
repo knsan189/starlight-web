@@ -4,7 +4,7 @@ export interface IUser extends GetCharResponse {
   [key: string];
   memo?: string;
   id?: string;
-  createdTime: Date | string;
+  createdTime?: Date | string;
 }
 
 export const TYPE_STORAGE = "storage";
