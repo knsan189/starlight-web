@@ -6,6 +6,7 @@ export interface IUser extends GetCharResponse {
   memo?: string;
   id?: string;
   createdTime?: Date | string;
+  userCode: number;
 }
 
 export const TYPE_STORAGE = "storage";

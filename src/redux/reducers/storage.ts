@@ -1,4 +1,4 @@
-import { EditUser } from "./../../@types/redux/storage.interface";
+import { DeleteUser, EditUser } from "./../../@types/redux/storage.interface";
 import {
   AddUser,
   SetSearchList,
@@ -9,9 +9,10 @@ import {
 } from "../../@types/redux/storage.interface";
 import { IUser } from "../../@types/types";
 
-const { ADD_USER, EDIT_USER, SET_USERS, SYNC_STORAGE, SET_SEARCH_LIST } = StorageActionTypes;
+const { ADD_USER, EDIT_USER, DELETE_USER, SET_USERS, SYNC_STORAGE, SET_SEARCH_LIST } =
+  StorageActionTypes;
 
-export const addUser = (user: IUser): AddUser => ({
+export const addUser = (user: Omit<IUser, "id">): AddUser => ({
   type: ADD_USER,
   payload: { user },
 });
@@ -19,6 +20,11 @@ export const addUser = (user: IUser): AddUser => ({
 export const editUser = (charName: IUser["charName"], user: IUser): EditUser => ({
   type: EDIT_USER,
   payload: { charName, user },
+});
+
+export const deleteUser = (userCode: IUser["userCode"]): DeleteUser => ({
+  type: DELETE_USER,
+  payload: { userCode },
 });
 
 export const setUsers = (users: IUser[]): SetUsers => ({
@@ -51,6 +57,7 @@ const StorageReducer = (state = initialState, action: StorageAction): StorageSta
       return { ...state, searchList: action.payload.searchList };
     case ADD_USER:
     case EDIT_USER:
+    case DELETE_USER:
     case SYNC_STORAGE: {
       return { ...state, status: "loading" };
     }

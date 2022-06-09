@@ -1,3 +1,4 @@
+import { DeleteUser } from "./../../@types/redux/storage.interface";
 import { RootState } from "./../reducers/index";
 import { setUsers } from "./../reducers/storage";
 import { all, call, fork, put, select, takeLatest } from "@redux-saga/core/effects";
@@ -10,7 +11,7 @@ import {
 import { IUser } from "../../@types/types";
 import UserService from "../../service/UserService";
 
-const { SYNC_STORAGE, ADD_USER, EDIT_USER } = StorageActionTypes;
+const { SYNC_STORAGE, ADD_USER, EDIT_USER, DELETE_USER } = StorageActionTypes;
 
 function* syncStorage() {
   try {
@@ -25,8 +26,8 @@ function* addUser({ payload }: AddUser) {
   try {
     const { user } = payload;
     const { users }: StorageState = yield select((state: RootState) => state.storage);
-    yield call(UserService.addMember, user);
-    yield put(setUsers([...users, user]));
+    const response: IUser = yield call(UserService.addMember, user);
+    yield put(setUsers([...users, response]));
   } catch (error) {
     console.log(error);
     yield;
@@ -49,6 +50,17 @@ function* editUser({ payload }: EditUser) {
   }
 }
 
+function* deleteUser({ payload }: DeleteUser) {
+  try {
+    yield call(UserService.deleteUser, payload.userCode);
+    const { users }: StorageState = yield select((state: RootState) => state.storage);
+    const newUsers = users.filter((user) => user.userCode !== payload.userCode);
+    yield put(setUsers(newUsers));
+  } catch (error) {
+    yield;
+  }
+}
+
 function* syncStorageWatcher() {
   yield takeLatest(SYNC_STORAGE, syncStorage);
 }
@@ -61,6 +73,15 @@ function* editUserWatcher() {
   yield takeLatest(EDIT_USER, editUser);
 }
 
+function* deleteUserWatcher() {
+  yield takeLatest(DELETE_USER, deleteUser);
+}
+
 export default function* StorageSaga() {
-  yield all([fork(syncStorageWatcher), fork(addUserWatcher), fork(editUserWatcher)]);
+  yield all([
+    fork(syncStorageWatcher),
+    fork(addUserWatcher),
+    fork(editUserWatcher),
+    fork(deleteUserWatcher),
+  ]);
 }

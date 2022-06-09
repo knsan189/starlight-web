@@ -6,6 +6,7 @@ import { RootState } from "../../redux/reducers";
 import { DropType, IUser } from "../../@types/types";
 import { useDispatch } from "react-redux";
 import { removeMember, setParties } from "../../redux/reducers/party";
+import { deleteUser } from "../../redux/reducers/storage";
 
 interface Props {
   user: IUser;
@@ -22,6 +23,7 @@ const UserMenu = ({ user, menu, onClose, onToggleDialog, type }: Props) => {
     if (type === "user") {
       dispatch(removeMember(user.charName));
     }
+    dispatch(deleteUser(user.userCode));
     onClose();
   };
 

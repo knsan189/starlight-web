@@ -9,7 +9,13 @@ export enum StorageActionTypes {
   SET_SEARCH_LIST = "SET_SEARCH_LIST",
 }
 
-export type StorageAction = AddUser | EditUser | SyncStorage | SetUsers | SetSearchList;
+export type StorageAction =
+  | AddUser
+  | EditUser
+  | DeleteUser
+  | SyncStorage
+  | SetUsers
+  | SetSearchList;
 
 export interface StorageState {
   users: IUser[];
@@ -19,12 +25,17 @@ export interface StorageState {
 
 export interface AddUser {
   type: StorageActionTypes.ADD_USER;
-  payload: { user: IUser };
+  payload: { user: Omit<IUser, "id"> };
 }
 
 export interface EditUser {
   type: StorageActionTypes.EDIT_USER;
   payload: { charName: IUser["charName"]; user: IUser };
+}
+
+export interface DeleteUser {
+  type: StorageActionTypes.DELETE_USER;
+  payload: { userCode: IUser["userCode"] };
 }
 
 export interface SyncStorage {
