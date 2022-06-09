@@ -2,13 +2,14 @@ import { IUser } from "../types";
 
 export enum StorageActionTypes {
   ADD_USER = "ADD_USER",
+  EDIT_USER = "EDIT_USER",
   DELETE_USER = "DELETE_USER",
   SYNC_STORAGE = "SYNC_STORAGE",
   SET_USERS = "SET_USERS",
   SET_SEARCH_LIST = "SET_SEARCH_LIST",
 }
 
-export type StorageAction = AddUser | SyncStorage | SetUsers | SetSearchList;
+export type StorageAction = AddUser | EditUser | SyncStorage | SetUsers | SetSearchList;
 
 export interface StorageState {
   users: IUser[];
@@ -19,6 +20,11 @@ export interface StorageState {
 export interface AddUser {
   type: StorageActionTypes.ADD_USER;
   payload: { user: IUser };
+}
+
+export interface EditUser {
+  type: StorageActionTypes.EDIT_USER;
+  payload: { charName: IUser["charName"]; user: IUser };
 }
 
 export interface SyncStorage {

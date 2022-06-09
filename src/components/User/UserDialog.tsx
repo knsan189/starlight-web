@@ -6,19 +6,14 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  Divider,
   InputBase,
-  List,
-  ListItem,
-  Paper,
-  TextField,
   Typography,
 } from "@mui/material";
 import { debounce } from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { IUser } from "../../@types/types";
-import { addUser } from "../../redux/reducers/storage";
+import { addUser, editUser } from "../../redux/reducers/storage";
 import CharService, { GetCharResponse } from "../../service/CharService";
 import UserService from "../../service/UserService";
 import UserDetails from "./UserDetails";
@@ -81,7 +76,7 @@ const UserDialog = ({ open, onClose, mode, user }: Props) => {
 
   const handleClickEdit = async () => {
     if (!user) return;
-    await UserService.editMember(user.charName, { ...user, ...details, ...form });
+    dispatch(editUser(user.charName, { ...user, ...details, ...form }));
     onClose();
   };
 

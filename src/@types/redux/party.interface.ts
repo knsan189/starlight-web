@@ -1,4 +1,4 @@
-import { IUser } from "../types";
+import { IUser, Member } from "../types";
 
 export enum PartyActionTypes {
   SET_PARTIES = "SET_PARTIES",
@@ -10,12 +10,12 @@ export enum PartyActionTypes {
 export type PartyAction = SetParties | AddParty | RemoveMember | RemoveParty;
 
 export interface PartyState {
-  parties: IUser[][];
+  parties: Member[][];
 }
 
 export interface SetParties {
   type: PartyActionTypes.SET_PARTIES;
-  payload: { parties: IUser[][] };
+  payload: { parties: Member[][] };
 }
 
 export interface AddParty {
@@ -25,7 +25,7 @@ export interface AddParty {
 
 export interface RemoveMember {
   type: PartyActionTypes.REMOVE_MEMBER;
-  payload: { user: IUser };
+  payload: { userName: IUser["charName"] };
 }
 export interface RemoveParty {
   type: PartyActionTypes.REMOVE_PARTY;

@@ -1,7 +1,7 @@
 import { MoreVert } from "@mui/icons-material";
 import { Avatar, Card, CardHeader, IconButton, Chip, Box } from "@mui/material";
 import React, { MouseEventHandler, useCallback, useState } from "react";
-import { DropType, IUser } from "../../@types/types";
+import { DropType, IUser, Member } from "../../@types/types";
 import Draggable from "../Draggable";
 import UserDialog from "./UserDialog";
 import UserMenu from "./UserMenu";
@@ -9,6 +9,7 @@ import UserMenu from "./UserMenu";
 interface Props {
   user: IUser;
   userIndex: number;
+  member?: Member;
   type: DropType;
 }
 
@@ -56,7 +57,7 @@ const matchImage = (text: string): string => {
   }
 };
 
-const User = ({ user, userIndex, type }: Props) => {
+const User = ({ user, userIndex, type, member }: Props) => {
   const [menu, toggleMenu] = useState<EventTarget>();
   const [dialog, toggleDialog] = useState(false);
 
@@ -71,7 +72,11 @@ const User = ({ user, userIndex, type }: Props) => {
   }, []);
 
   return (
-    <Draggable index={userIndex} draggableId={`${type}-${charName}`} type={type}>
+    <Draggable
+      index={userIndex}
+      draggableId={`${type}-${member ? member.id : charName}`}
+      type={type}
+    >
       <Card>
         <CardHeader
           avatar={<Avatar src={`/images/${matchImage(charClass)}.png`}></Avatar>}
@@ -85,8 +90,8 @@ const User = ({ user, userIndex, type }: Props) => {
           }
         />
         <Box px={1} pb={2}>
-          {user.tags?.map((tag) => (
-            <Chip label={tag} sx={{ mr: 0.5 }} />
+          {user.tags?.map((tag, index) => (
+            <Chip label={tag} sx={{ mr: 0.5 }} key={index} />
           ))}
         </Box>
         <UserMenu
@@ -100,6 +105,10 @@ const User = ({ user, userIndex, type }: Props) => {
       </Card>
     </Draggable>
   );
+};
+
+User.defaultProps = {
+  member: undefined,
 };
 
 export default User;

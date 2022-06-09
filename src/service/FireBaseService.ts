@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { collection, doc, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
-import { IUser } from "../@types/types";
+import { IUser, Member } from "../@types/types";
 
 const {
   REACT_APP_FIREBASE_API_KEY,
@@ -26,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const userListRef = doc(db, "storage", "userList");
 
-type PartyList = IUser[][];
+type PartyList = Member[][];
 
 export const KOKOU = "kokou";
 export const KAYANG = "kayang";

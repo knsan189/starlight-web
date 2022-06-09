@@ -13,6 +13,7 @@ interface Props {
 
 const PartyList = ({ type }: Props) => {
   const dispatch = useDispatch();
+
   const { parties } = useSelector((state: RootState) => state.party);
 
   const getPartyList = useCallback(async () => {

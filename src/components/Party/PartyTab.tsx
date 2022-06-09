@@ -1,6 +1,5 @@
-import { Camera, PhotoCamera } from "@mui/icons-material";
+import { PhotoCamera } from "@mui/icons-material";
 import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
-
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/reducers";
@@ -19,7 +18,6 @@ const PartyTab = ({ value, onChange, onScreenShot }: Props) => {
   const { parties } = useSelector((state: RootState) => state.party);
 
   const handleClickSave = async () => {
-    await FirebaseService.setUserList(users);
     await FirebaseService.setPartyList(parties, types[value] as PartyTypes);
   };
 

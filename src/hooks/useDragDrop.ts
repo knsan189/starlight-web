@@ -1,3 +1,4 @@
+import { IUser, Member, TYPE_PARTY, TYPE_STORAGE } from "./../@types/types.d";
 import { useCallback } from "react";
 import { DropResult } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
@@ -5,6 +6,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { setParties } from "../redux/reducers/party";
 import { setUsers } from "../redux/reducers/storage";
+
+const getNewMember = (userName: IUser["charName"]): Member => {
+  return {
+    userName,
+    id: Date.now() * Math.random(),
+  };
+};
 
 const useDragDrop = () => {
   const { parties } = useSelector((state: RootState) => state.party);
@@ -49,7 +57,13 @@ const useDragDrop = () => {
             const targetPartyIndex = parseInt(destination.droppableId.replace(`party-`, ""), 10);
             const targetUserIndex = destination.index;
             const newPartyList = [...parties];
-            newPartyList[targetPartyIndex].splice(targetUserIndex, 0, target);
+
+            newPartyList[targetPartyIndex].splice(
+              targetUserIndex,
+              0,
+              getNewMember(target.charName),
+            );
+
             dispatch(setParties(newPartyList));
           }
         }

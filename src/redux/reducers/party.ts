@@ -5,23 +5,27 @@ import {
   PartyState,
   SetParties,
 } from "../../@types/redux/party.interface";
-import { IUser } from "../../@types/types";
+import { IUser, Member } from "../../@types/types";
 import { stat } from "fs";
 
-function findTargetPartyAndIndex(user: IUser, party: IUser[][]) {
-  for (let i = 0; i < party.length; i++) {
-    for (let j = 0; i < party[i].length; j++) {
-      if (party[i][j].charName === user.charName) {
-        return { partyIndex: i, memberIndex: j };
+function findTargetPartyAndIndex(userName: IUser["charName"], parties: Member[][]) {
+  let target: { partyIndex: number; memberIndex: number } | undefined;
+
+  for (let i = 0; i < parties.length; i++) {
+    for (let j = 0; j < parties[i].length; j++) {
+      if (parties[i][j].userName === userName) {
+        target = { partyIndex: i, memberIndex: j };
+        break;
       }
     }
   }
-  return undefined;
+
+  return target;
 }
 
 const { SET_PARTIES, ADD_PARTY, REMOVE_MEMBER, REMOVE_PARTY } = PartyActionTypes;
 
-export const setParties = (parties: IUser[][]): SetParties => ({
+export const setParties = (parties: Member[][]): SetParties => ({
   type: SET_PARTIES,
   payload: { parties },
 });
@@ -31,9 +35,9 @@ export const addParty = (): AddParty => ({
   payload: {},
 });
 
-export const removeMember = (user: IUser): RemoveMember => ({
+export const removeMember = (userName: IUser["charName"]): RemoveMember => ({
   type: REMOVE_MEMBER,
-  payload: { user },
+  payload: { userName },
 });
 
 export const removeParty = (partyIndex: number): RemoveParty => ({
@@ -54,11 +58,12 @@ const PartyReducer = (state = initialState, action: PartyAction): PartyState => 
       return { ...state, parties: [...state.parties, []] };
     }
     case REMOVE_MEMBER: {
-      const target = findTargetPartyAndIndex(action.payload.user, state.parties);
-      if (!target) return state;
-      const { partyIndex, memberIndex } = target;
+      const target = findTargetPartyAndIndex(action.payload.userName, state.parties);
+      if (!target) {
+        return state;
+      }
       const newParties = [...state.parties];
-      newParties[partyIndex].splice(memberIndex, 1);
+      newParties[target.partyIndex].splice(target.memberIndex, 1);
       return {
         ...state,
         parties: newParties,

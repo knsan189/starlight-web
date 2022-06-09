@@ -89,7 +89,13 @@ const UserDetails = ({ details, form, editMode, onChange, onUpdate }: Props) => 
           <Typography gutterBottom variant="subtitle2">
             메모추가
           </Typography>
-          <TextField fullWidth size="small" multiline onChange={handleChangeMemo} value={memo} />
+          <TextField
+            fullWidth
+            size="small"
+            multiline
+            onChange={handleChangeMemo}
+            value={memo || ""}
+          />
         </Box>
 
         <Box pt={1}>

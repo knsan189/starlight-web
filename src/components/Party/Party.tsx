@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader, Divider } from "@mui/material";
 import React from "react";
-import { IUser } from "../../@types/types";
+import { IUser, Member } from "../../@types/types";
 import Draggable from "../Draggable";
 import UserList from "../User/UserList";
 
 interface Props {
-  party: IUser[];
+  party: Member[];
   partyIndex: number;
 }
 const Party = ({ party, partyIndex }: Props) => {

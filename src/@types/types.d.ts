@@ -13,3 +13,8 @@ export const TYPE_PARTY = "party";
 export const TYPE_USER = "user";
 
 export type DropType = TYPE_STORAGE | TYPE_PARTY | TYPE_USER;
+
+export interface Member {
+  userName: IUser["charName"];
+  id: number;
+}
