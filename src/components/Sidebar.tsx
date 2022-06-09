@@ -17,7 +17,7 @@ interface Props {
 }
 const Sidebar = ({ open, onClose }: Props) => {
   const [dialog, toggleDialog] = useState(false);
-  const { users, searchList } = useSelector((state: RootState) => state.storage);
+  const { users } = useSelector((state: RootState) => state.storage);
   const dispatch = useDispatch();
 
   const onToggleDialog = useCallback(() => {
@@ -25,7 +25,7 @@ const Sidebar = ({ open, onClose }: Props) => {
   }, []);
 
   const delayQuery = debounce((inputValue) => {
-    const newSearchList: IUser[] = [];
+    const newSearchList: IUser["userCode"][] = [];
 
     users.forEach((user) => {
       if (
@@ -33,7 +33,7 @@ const Sidebar = ({ open, onClose }: Props) => {
         user.itemLevel.toString().includes(inputValue) ||
         user.charName.includes(inputValue)
       ) {
-        newSearchList.push(user);
+        newSearchList.push(user.userCode);
       }
     });
 
@@ -93,7 +93,7 @@ const Sidebar = ({ open, onClose }: Props) => {
         </Box>
       </Box>
       <Box pl={3} pr={2}>
-        <Storage searchList={searchList} />
+        <Storage />
       </Box>
       <UserDialog open={dialog} onClose={onToggleDialog} mode="create" />
     </Drawer>

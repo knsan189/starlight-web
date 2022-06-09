@@ -32,7 +32,7 @@ export const setUsers = (users: IUser[]): SetUsers => ({
   payload: { users },
 });
 
-export const setSearchList = (searchList?: IUser[]): SetSearchList => ({
+export const setSearchList = (searchList?: IUser["userCode"][]): SetSearchList => ({
   type: SET_SEARCH_LIST,
   payload: { searchList },
 });

@@ -19,7 +19,7 @@ export type StorageAction =
 
 export interface StorageState {
   users: IUser[];
-  searchList?: IUser[];
+  searchList?: IUser["userCode"][];
   status: "ok" | "fail" | "loading";
 }
 
@@ -50,5 +50,5 @@ export interface SetUsers {
 
 export interface SetSearchList {
   type: StorageActionTypes.SET_SEARCH_LIST;
-  payload: { searchList?: IUser[] };
+  payload: { searchList?: IUser["userCode"][] };
 }

@@ -61,7 +61,7 @@ const User = ({ user, userIndex, type, member }: Props) => {
   const [menu, toggleMenu] = useState<EventTarget>();
   const [dialog, toggleDialog] = useState(false);
 
-  const { charName, charLevel, charClass, itemLevel, createdTime } = user;
+  const { charName, charLevel, charClass, itemLevel, createdTime, userCode } = user;
 
   const onToggleMenu: MouseEventHandler<HTMLButtonElement> = useCallback((event) => {
     toggleMenu((prev) => (prev ? undefined : event.target));
@@ -74,7 +74,7 @@ const User = ({ user, userIndex, type, member }: Props) => {
   return (
     <Draggable
       index={userIndex}
-      draggableId={`${type}-${member ? member.id : charName}`}
+      draggableId={`${type}-${member ? member.id : userCode}`}
       type={type}
     >
       <Card>

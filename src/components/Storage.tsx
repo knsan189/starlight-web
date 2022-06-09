@@ -6,18 +6,31 @@ import { RootState } from "../redux/reducers";
 import Droppable from "./Droppable";
 import User from "./User/User";
 
-interface Props {
-  searchList?: IUser[];
-}
-const Storage = ({ searchList }: Props) => {
-  const { users } = useSelector((state: RootState) => state.storage);
-  const result = searchList ? searchList : users;
+const Storage = () => {
+  const { users, searchList } = useSelector((state: RootState) => state.storage);
+
+  const getUserList = useCallback((): IUser[] => {
+    if (searchList) {
+      const list: IUser[] = [];
+      searchList.forEach((item) => {
+        users.forEach((user) => {
+          if (user.userCode === item) {
+            list.push(user);
+          }
+        });
+      });
+      return list;
+    }
+    return users;
+  }, [users, searchList]);
+
+  const result = getUserList();
 
   return (
     <Box>
       <Droppable droppableId="storage" type="user" direction="vertical">
         {result.map((user: IUser, index: number) => (
-          <Box key={user.charName} width="100%">
+          <Box key={user.userCode} width="100%">
             <User user={user} userIndex={index} type="storage" />
           </Box>
         ))}

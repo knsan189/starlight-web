@@ -22,8 +22,9 @@ const UserMenu = ({ user, menu, onClose, onToggleDialog, type }: Props) => {
   const handleDelete = () => {
     if (type === "user") {
       dispatch(removeMember(user.charName));
+    } else {
+      dispatch(deleteUser(user.userCode));
     }
-    dispatch(deleteUser(user.userCode));
     onClose();
   };
 

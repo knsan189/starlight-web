@@ -22,7 +22,7 @@ const useDragDrop = () => {
 
   const onDragEnd = useCallback(
     (result: DropResult) => {
-      const { source, destination, type } = result;
+      const { source, destination, type, draggableId } = result;
 
       if (!destination) {
         return;
@@ -49,7 +49,13 @@ const useDragDrop = () => {
           }
           dispatch(setParties(newPartyList));
         } else if (source.droppableId === "storage") {
-          const target = searchList ? searchList[source.index] : users[source.index];
+          const targetCode = parseInt(draggableId.replace("storage-", ""), 10);
+          const target = users.find((user) => user.userCode === targetCode);
+
+          if (!target) {
+            return;
+          }
+
           if (destination.droppableId === "storage") {
             // newUserList.splice(destination.index, 0, target);
             return;
@@ -69,7 +75,7 @@ const useDragDrop = () => {
         }
       }
     },
-    [users, parties, searchList, dispatch],
+    [users, parties, dispatch],
   );
 
   return { onDragEnd };
