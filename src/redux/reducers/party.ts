@@ -1,11 +1,19 @@
-import { AddParty, RemoveMember, RemoveParty, SetRaid } from "./../../@types/redux/party.interface";
+import {
+  AddParty,
+  AddRaid,
+  RemoveMember,
+  RemoveParty,
+  RemoveRaid,
+  SetRaid,
+  SetRaidList,
+} from "./../../@types/redux/party.interface";
 import {
   PartyAction,
   PartyActionTypes,
   PartyState,
   SetParties,
 } from "../../@types/redux/party.interface";
-import { IUser, Member, Raid } from "../../@types/types";
+import { IUser, Member, Raid, RaidList } from "../../@types/types";
 import { stat } from "fs";
 
 function findTargetPartyAndIndex(userName: IUser["charName"], parties: Member[][]) {
@@ -23,7 +31,16 @@ function findTargetPartyAndIndex(userName: IUser["charName"], parties: Member[][
   return target;
 }
 
-const { SET_PARTIES, SET_RAID, ADD_PARTY, REMOVE_MEMBER, REMOVE_PARTY } = PartyActionTypes;
+const {
+  SET_PARTIES,
+  SET_RAID,
+  SET_RAID_LIST,
+  ADD_PARTY,
+  ADD_RAID,
+  REMOVE_MEMBER,
+  REMOVE_PARTY,
+  REMOVE_RAID,
+} = PartyActionTypes;
 
 export const setParties = (parties: Member[][]): SetParties => ({
   type: SET_PARTIES,
@@ -35,9 +52,24 @@ export const setRaid = (raid: Raid): SetRaid => ({
   payload: { raid },
 });
 
+export const setRaidList = (raidList: RaidList): SetRaidList => ({
+  type: SET_RAID_LIST,
+  payload: { raidList },
+});
+
 export const addParty = (): AddParty => ({
   type: ADD_PARTY,
   payload: {},
+});
+
+export const addRaid = (title: string): AddRaid => ({
+  type: ADD_RAID,
+  payload: { title },
+});
+
+export const removeRaid = (id: number): RemoveRaid => ({
+  type: REMOVE_RAID,
+  payload: { id },
 });
 
 export const removeMember = (userName: IUser["charName"]): RemoveMember => ({
@@ -53,7 +85,9 @@ export const removeParty = (partyIndex: number): RemoveParty => ({
 const initialState: PartyState = {
   id: undefined,
   title: undefined,
+  raidList: undefined,
   parties: [[]],
+  status: "ok",
 };
 
 const PartyReducer = (state = initialState, action: PartyAction): PartyState => {
@@ -65,7 +99,9 @@ const PartyReducer = (state = initialState, action: PartyAction): PartyState => 
       return { ...state, parties: [...state.parties, []] };
     }
     case SET_RAID:
-      return action.payload.raid;
+      return { ...state, ...action.payload.raid };
+    case SET_RAID_LIST:
+      return { ...state, raidList: action.payload.raidList, status: "ok" };
     case REMOVE_MEMBER: {
       const target = findTargetPartyAndIndex(action.payload.userName, state.parties);
       if (!target) {
@@ -78,6 +114,9 @@ const PartyReducer = (state = initialState, action: PartyAction): PartyState => 
         parties: newParties,
       };
     }
+    case ADD_RAID:
+    case REMOVE_RAID:
+      return { ...state, status: "loading" };
     default:
       return state;
   }

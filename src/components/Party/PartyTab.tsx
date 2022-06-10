@@ -1,11 +1,11 @@
-import { PhotoCamera } from "@mui/icons-material";
-import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
-import React from "react";
+import { Add, PhotoCamera } from "@mui/icons-material";
+import { Box, Button, IconButton, Tab, Tabs } from "@mui/material";
+import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import { Raid, RaidList } from "../../@types/types";
 import { RootState } from "../../redux/reducers";
-import FirebaseService, { PartyTypes } from "../../service/FireBaseService";
 import RaidService from "../../service/RaidService";
+import PartyDialog from "./PartyDialog";
 
 interface Props {
   value: number;
@@ -15,8 +15,8 @@ interface Props {
 }
 
 const PartyTab = ({ value, raidList, onChange, onScreenShot }: Props) => {
-  const { users } = useSelector((state: RootState) => state.storage);
   const raid = useSelector((state: RootState) => state.party);
+  const [dialog, toggleDialog] = useState(false);
 
   const handleClickSave = async () => {
     if (raid.id) {
@@ -24,13 +24,23 @@ const PartyTab = ({ value, raidList, onChange, onScreenShot }: Props) => {
     }
   };
 
+  const onToggleDialog = useCallback(() => {
+    toggleDialog((prev) => !prev);
+  }, []);
+
   return (
     <Box pb={2} display="flex" justifyContent="space-between" alignItems="center">
-      <Tabs onChange={onChange} value={value}>
-        {raidList?.map((raid, index) => (
-          <Tab label={raid.title} tabIndex={index} key={raid.id} />
-        ))}
-      </Tabs>
+      <Box display="flex" alignItems="center">
+        <Tabs onChange={onChange} value={value}>
+          {raidList?.map((raid, index) => (
+            <Tab label={raid.title} tabIndex={index} key={raid.id} />
+          ))}
+        </Tabs>
+        <IconButton size="small" onClick={onToggleDialog}>
+          <Add />
+        </IconButton>
+      </Box>
+      <PartyDialog open={dialog} onClose={onToggleDialog} />
       <Box>
         <Button variant="contained" onClick={onScreenShot} color="secondary" sx={{ mr: 1 }}>
           <PhotoCamera />

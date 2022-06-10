@@ -39,6 +39,25 @@ class RaidService {
     });
   }
 
+  public static addRaid(title: string): Promise<Raid> {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          const response: AxiosResponse<Raid> = await axios({
+            method: "post",
+            url: `${url}/api/raid`,
+            data: {
+              title,
+            },
+          });
+          resolve(response.data);
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    });
+  }
+
   public static editRaid(id: number, raid: Raid) {
     return new Promise((resolve, reject) => {
       (async () => {
