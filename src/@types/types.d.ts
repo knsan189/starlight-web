@@ -19,3 +19,11 @@ export interface Member {
   userName: IUser["charName"];
   id: number;
 }
+
+export interface Raid {
+  id: number;
+  title: string;
+  parties: Member[][];
+}
+
+export type RaidList = Omit<Raid, "parties">[];

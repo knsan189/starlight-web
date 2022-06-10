@@ -1,13 +1,14 @@
 import { Save } from "@mui/icons-material";
-import { Box, Button, Divider, linkClasses, styled } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import { Box, Button, styled } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import * as htmlToImage from "html-to-image";
 import { addParty } from "../redux/reducers/party";
 import { ABREL, KAYANG, KOKOU } from "../service/FireBaseService";
 import PartyList from "./Party/PartyList";
 import PartyTab from "./Party/PartyTab";
 import html2canvas from "html2canvas";
+import RaidService from "../service/RaidService";
+import { RaidList } from "../@types/types";
 
 const PartyLayout = styled(Box, { shouldForwardProp: (prop) => prop !== "sidebar" })<{
   sidebar: boolean;
@@ -48,6 +49,7 @@ const TabPanel = ({ children, index, value }: TabPanelProps) => {
 
 const Main = ({ sidebar, onToggleSidebar }: Props) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [raidList, setRaidList] = useState<RaidList>();
 
   const dispatch = useDispatch();
 
@@ -74,18 +76,30 @@ const Main = ({ sidebar, onToggleSidebar }: Props) => {
     }
   }, [activeTabIndex]);
 
+  const getRaidList = useCallback(async () => {
+    const response = await RaidService.getRaidList();
+    setRaidList(response);
+  }, []);
+
+  useEffect(() => {
+    getRaidList();
+  }, [getRaidList]);
+
   return (
     <PartyLayout sidebar={sidebar}>
-      <PartyTab value={activeTabIndex} onChange={onChangeTabIndex} onScreenShot={onScreenShot} />
-      <TabPanel index={0} value={activeTabIndex}>
-        <PartyList type={KOKOU} />
-      </TabPanel>
-      <TabPanel index={1} value={activeTabIndex}>
-        <PartyList type={KAYANG} />
-      </TabPanel>
-      <TabPanel index={2} value={activeTabIndex}>
-        <PartyList type={ABREL} />
-      </TabPanel>
+      <PartyTab
+        value={activeTabIndex}
+        onChange={onChangeTabIndex}
+        onScreenShot={onScreenShot}
+        raidList={raidList}
+      />
+
+      {raidList?.map((raid, index) => (
+        <TabPanel key={raid.id} index={index} value={activeTabIndex}>
+          <PartyList id={raid.id} />
+        </TabPanel>
+      ))}
+
       <Button variant="outlined" onClick={handleClickAdd}>
         파티 추가하기
       </Button>

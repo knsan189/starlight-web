@@ -2,31 +2,34 @@ import { PhotoCamera } from "@mui/icons-material";
 import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
+import { Raid, RaidList } from "../../@types/types";
 import { RootState } from "../../redux/reducers";
-import FirebaseService, { ABREL, KAYANG, KOKOU, PartyTypes } from "../../service/FireBaseService";
+import FirebaseService, { PartyTypes } from "../../service/FireBaseService";
+import RaidService from "../../service/RaidService";
 
 interface Props {
   value: number;
+  raidList?: RaidList;
   onChange: (event: React.SyntheticEvent, index: number) => void;
   onScreenShot: () => void;
 }
 
-const types = [KOKOU, KAYANG, ABREL];
-
-const PartyTab = ({ value, onChange, onScreenShot }: Props) => {
+const PartyTab = ({ value, raidList, onChange, onScreenShot }: Props) => {
   const { users } = useSelector((state: RootState) => state.storage);
-  const { parties } = useSelector((state: RootState) => state.party);
+  const raid = useSelector((state: RootState) => state.party);
 
   const handleClickSave = async () => {
-    await FirebaseService.setPartyList(parties, types[value] as PartyTypes);
+    if (raid.id) {
+      await RaidService.editRaid(raid.id, raid as Raid);
+    }
   };
 
   return (
     <Box pb={2} display="flex" justifyContent="space-between" alignItems="center">
       <Tabs onChange={onChange} value={value}>
-        <Tab label="쿠크세이튼" />
-        <Tab label="카양겔" />
-        <Tab label="아브렐슈드" />
+        {raidList?.map((raid, index) => (
+          <Tab label={raid.title} tabIndex={index} key={raid.id} />
+        ))}
       </Tabs>
       <Box>
         <Button variant="contained" onClick={onScreenShot} color="secondary" sx={{ mr: 1 }}>
@@ -38,6 +41,10 @@ const PartyTab = ({ value, onChange, onScreenShot }: Props) => {
       </Box>
     </Box>
   );
+};
+
+PartyTab.defaultProps = {
+  raidList: undefined,
 };
 
 export default PartyTab;

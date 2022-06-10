@@ -10,7 +10,7 @@ import { setUsers } from "../redux/reducers/storage";
 const getNewMember = (userName: IUser["charName"]): Member => {
   return {
     userName,
-    id: Date.now() * Math.random(),
+    id: Math.floor(Date.now() * Math.random()),
   };
 };
 

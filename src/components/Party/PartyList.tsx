@@ -1,35 +1,33 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { Raid } from "../../@types/types";
 import { RootState } from "../../redux/reducers";
-import { setParties } from "../../redux/reducers/party";
+import { setParties, setRaid } from "../../redux/reducers/party";
 import FirebaseService, { PartyTypes } from "../../service/FireBaseService";
+import RaidService from "../../service/RaidService";
 import Droppable from "../Droppable";
 import Party from "./Party";
 
 interface Props {
-  type: PartyTypes;
+  id: number;
 }
 
-const PartyList = ({ type }: Props) => {
+const PartyList = ({ id }: Props) => {
   const dispatch = useDispatch();
-
   const { parties } = useSelector((state: RootState) => state.party);
 
-  const getPartyList = useCallback(async () => {
-    const list = await FirebaseService.getPartyList(type);
+  const getRaid = useCallback(async () => {
+    const response = await RaidService.getRaid(id);
 
-    if (!list) {
-      dispatch(setParties([[]]));
-      return;
+    if (response) {
+      dispatch(setRaid(response));
     }
-
-    dispatch(setParties(list));
-  }, [dispatch, type]);
+  }, [id, dispatch]);
 
   useEffect(() => {
-    getPartyList();
-  }, [getPartyList]);
+    getRaid();
+  }, [getRaid]);
 
   return (
     <Droppable droppableId="party" type="party" direction="vertical">

@@ -1,11 +1,11 @@
-import { AddParty, RemoveMember, RemoveParty } from "./../../@types/redux/party.interface";
+import { AddParty, RemoveMember, RemoveParty, SetRaid } from "./../../@types/redux/party.interface";
 import {
   PartyAction,
   PartyActionTypes,
   PartyState,
   SetParties,
 } from "../../@types/redux/party.interface";
-import { IUser, Member } from "../../@types/types";
+import { IUser, Member, Raid } from "../../@types/types";
 import { stat } from "fs";
 
 function findTargetPartyAndIndex(userName: IUser["charName"], parties: Member[][]) {
@@ -23,11 +23,16 @@ function findTargetPartyAndIndex(userName: IUser["charName"], parties: Member[][
   return target;
 }
 
-const { SET_PARTIES, ADD_PARTY, REMOVE_MEMBER, REMOVE_PARTY } = PartyActionTypes;
+const { SET_PARTIES, SET_RAID, ADD_PARTY, REMOVE_MEMBER, REMOVE_PARTY } = PartyActionTypes;
 
 export const setParties = (parties: Member[][]): SetParties => ({
   type: SET_PARTIES,
   payload: { parties },
+});
+
+export const setRaid = (raid: Raid): SetRaid => ({
+  type: SET_RAID,
+  payload: { raid },
 });
 
 export const addParty = (): AddParty => ({
@@ -46,6 +51,8 @@ export const removeParty = (partyIndex: number): RemoveParty => ({
 });
 
 const initialState: PartyState = {
+  id: undefined,
+  title: undefined,
   parties: [[]],
 };
 
@@ -57,6 +64,8 @@ const PartyReducer = (state = initialState, action: PartyAction): PartyState => 
     case ADD_PARTY: {
       return { ...state, parties: [...state.parties, []] };
     }
+    case SET_RAID:
+      return action.payload.raid;
     case REMOVE_MEMBER: {
       const target = findTargetPartyAndIndex(action.payload.userName, state.parties);
       if (!target) {

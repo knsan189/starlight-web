@@ -67,3 +67,6 @@ export const USER_LIST = [
     charClass: "5",
   },
 ];
+
+export const IMG_SPRITE_URL =
+  "https://cdn-lostark.game.onstove.com/2018/obt/assets/images/pc/sprite/sprite.png";
