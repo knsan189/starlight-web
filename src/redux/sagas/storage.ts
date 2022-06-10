@@ -27,7 +27,7 @@ function* addUser({ payload }: AddUser) {
     const { user } = payload;
     const { users }: StorageState = yield select((state: RootState) => state.storage);
     const response: IUser = yield call(UserService.addMember, user);
-    yield put(setUsers([...users, response]));
+    yield put(setUsers([response, ...users]));
   } catch (error) {
     console.log(error);
     yield;

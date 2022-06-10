@@ -5,6 +5,7 @@ import { DropType, IUser, Member } from "../../@types/types";
 import Draggable from "../Draggable";
 import UserDialog from "./UserDialog";
 import UserMenu from "./UserMenu";
+import UserPartyCheck from "./UserPartyCheck";
 
 interface Props {
   user: IUser;
@@ -89,6 +90,7 @@ const User = ({ user, userIndex, type, member }: Props) => {
             </IconButton>
           }
         />
+        {type === "storage" && <UserPartyCheck user={user} />}
         <Box px={1} pb={2}>
           {user.tags?.map((tag, index) => (
             <Chip label={tag} sx={{ mr: 0.5 }} key={index} />
