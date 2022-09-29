@@ -1,5 +1,5 @@
 import React from "react";
-import { Direction, Droppable as ReactDroppable } from "react-beautiful-dnd";
+import { Direction, Droppable as ReactDroppable } from "@hello-pangea/dnd";
 import { DropType } from "../@types/types";
 
 interface Props {

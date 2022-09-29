@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext } from "@hello-pangea/dnd";
 import useDragDrop from "./hooks/useDragDrop";
 import { useDispatch } from "react-redux";
 import { syncStorage } from "./redux/reducers/storage";

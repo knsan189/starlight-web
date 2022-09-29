@@ -1,11 +1,10 @@
-import { IUser, Member, TYPE_PARTY, TYPE_STORAGE } from "./../@types/types.d";
+import { IUser, Member } from "./../@types/types.d";
 import { useCallback } from "react";
-import { DropResult } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { setParties } from "../redux/reducers/party";
-import { setUsers } from "../redux/reducers/storage";
+import { DropResult } from "@hello-pangea/dnd";
 
 const getNewMember = (userName: IUser["charName"]): Member => {
   return {
@@ -16,7 +15,7 @@ const getNewMember = (userName: IUser["charName"]): Member => {
 
 const useDragDrop = () => {
   const { parties } = useSelector((state: RootState) => state.party);
-  const { users, searchList } = useSelector((state: RootState) => state.storage);
+  const { users } = useSelector((state: RootState) => state.storage);
 
   const dispatch = useDispatch();
 

@@ -14,7 +14,7 @@ export interface GetCharResponse {
 //profile-character-info__server
 //game-info__guild
 
-const url = process.env.NODE_ENV === "development" ? "http://localhost:8001" : "";
+const url = process.env.NODE_ENV === "development" ? "http://knsan189.iptime.org:8080" : "";
 
 class CharService {
   public static async getChar(nickname: string): Promise<GetCharResponse | null> {

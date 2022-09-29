@@ -1,5 +1,5 @@
 import React from "react";
-import { Draggable as ReactDraggable, DraggingStyle, NotDraggingStyle } from "react-beautiful-dnd";
+import { Draggable as ReactDraggable, DraggingStyle, NotDraggingStyle } from "@hello-pangea/dnd";
 import { DropType } from "../@types/types";
 
 interface Props {

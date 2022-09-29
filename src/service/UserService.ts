@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IUser } from "../@types/types";
 
-const url = process.env.NODE_ENV === "development" ? "http://localhost:8001" : "";
+const url = process.env.NODE_ENV === "development" ? "http://knsan189.iptime.org:8080" : "";
 
 class UserService {
   public static addMember(user: Omit<IUser, "id">): Promise<IUser> {
