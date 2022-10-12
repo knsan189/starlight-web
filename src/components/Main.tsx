@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { addParty, setRaidList } from "../redux/reducers/party";
 import PartyList from "./Party/PartyList";
 import PartyTab from "./Party/PartyTab";
-import html2canvas from "html2canvas";
 import RaidService from "../service/RaidService";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
@@ -65,15 +64,15 @@ const Main = ({ sidebar, onToggleSidebar }: Props) => {
   );
 
   const onScreenShot = useCallback(async () => {
-    const element = document.getElementById(`party-${activeTabIndex}`);
-    if (element) {
-      const response = await html2canvas(element);
-      const link = document.createElement("a");
-      link.download = "파티.jpeg";
-      link.href = response.toDataURL("image/jpeg");
-      link.click();
-    }
-  }, [activeTabIndex]);
+    // const element = document.getElementById(`party-${activeTabIndex}`);
+    // if (element) {
+    //   const response = await html2canvas(element);
+    //   const link = document.createElement("a");
+    //   link.download = "파티.jpeg";
+    //   link.href = response.toDataURL("image/jpeg");
+    //   link.click();
+    // }
+  }, []);
 
   const getRaidList = useCallback(async () => {
     const response = await RaidService.getRaidList();

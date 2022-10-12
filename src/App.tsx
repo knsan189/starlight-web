@@ -1,34 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import { DragDropContext } from "@hello-pangea/dnd";
-import useDragDrop from "./hooks/useDragDrop";
-import { useDispatch } from "react-redux";
-import { syncStorage } from "./redux/reducers/storage";
-import Sidebar from "./components/Sidebar";
-import Main from "./components/Main";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Fortune from "./pages/Fortune";
+import Home from "./pages/Home";
 
 function App() {
-  const { onDragEnd } = useDragDrop();
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(syncStorage());
-  }, [dispatch]);
-
-  const [sidebar, toggleSidebar] = useState(true);
-
-  const onToggleSidebar = useCallback(() => {
-    toggleSidebar((prev) => !prev);
-  }, []);
-
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Box display="flex">
-        <Sidebar open={sidebar} onClose={onToggleSidebar} />
-        <Main sidebar={sidebar} onToggleSidebar={onToggleSidebar} />
-      </Box>
-    </DragDropContext>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" index element={<Home />} />
+        <Route path="/fortune" element={<Fortune />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

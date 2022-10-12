@@ -2,8 +2,8 @@
 
 
 npm run build &&
-rm -rf ../cafe24/client/build/* &&
-cp -r build/* ../cafe24/client/build
+rm -rf ../starlight-server/public/* &&
+cp -r build/* ../starlight-server/public
 
 
 exit 0
