@@ -21,4 +21,23 @@ export default class FortuneService {
       })();
     });
   }
+
+  public static updateFortune(fortune: Fortune): Promise<Fortune> {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          await axios({
+            method: "PUT",
+            url: `${SERVER_URL}/api/fortune/${fortune.id}`,
+            data: {
+              fortune,
+            },
+          });
+          resolve(fortune);
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    });
+  }
 }

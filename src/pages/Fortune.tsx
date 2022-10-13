@@ -1,38 +1,71 @@
-import { Box, Container, Divider, Paper, styled, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Container, TextField, Paper, Box, Typography } from "@mui/material";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import FortuneCard from "../components/FortuneCard";
 import FortuneService from "../service/FortuneService";
-
-const StyledBox = styled(Box)(({ theme }) => ({
-  background: theme.palette.grey[100],
-  padding: theme.spacing(1),
-  borderRadius: theme.shape.borderRadius,
-}));
 
 const Fortune = () => {
   const [fortunes, setFortunes] = useState<Fortune[]>([]);
+  const [active, toggleActive] = useState(false);
+
   useEffect(() => {
     (async () => {
       const response = await FortuneService.getFortunes(0, 100);
       setFortunes(response);
     })();
   }, []);
+
+  const onChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+      const { name, value } = event.target;
+      setFortunes((prev) => {
+        const newFortunes = [...prev];
+        newFortunes[index] = { ...newFortunes[index], [name]: value };
+        return newFortunes;
+      });
+    },
+    [],
+  );
+
+  const onBlur = useCallback(
+    async (fortune: Fortune) => {
+      if (active) {
+        await FortuneService.updateFortune(fortune);
+      }
+    },
+    [active],
+  );
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    toggleActive(value === "dhswja95");
+  };
+
   return (
-    <Container>
-      {fortunes.map((fortune) => (
-        <Paper key={fortune.id} sx={{ mb: 2, p: 2 }}>
-          <Typography variant="subtitle1" gutterBottom>
-            {fortune.id}번째 운세
-          </Typography>
-          <Divider />
-          <StyledBox my={1}>
-            <Typography variant="body2">{fortune.fortune}</Typography>
-          </StyledBox>
-          <StyledBox>
-            <Typography variant="body2" sx={{ wordBreak: "break-all" }}>
-              {fortune.msg}
-            </Typography>
-          </StyledBox>
-        </Paper>
+    <Container maxWidth="md">
+      <Paper>
+        <Box p={2}>
+          <TextField size="small" label="관리 비밀번호" type="password" onChange={handleChange} />
+          <Box pl={1}>
+            {active ? (
+              <Typography variant="caption" color="secondary">
+                운세 수정 가능
+              </Typography>
+            ) : (
+              <Typography variant="caption" color="error">
+                운세 수정 권한 없음
+              </Typography>
+            )}
+          </Box>
+        </Box>
+      </Paper>
+      {fortunes.map((fortune, index) => (
+        <FortuneCard
+          fortune={fortune}
+          index={index}
+          key={fortune.id}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
       ))}
     </Container>
   );
