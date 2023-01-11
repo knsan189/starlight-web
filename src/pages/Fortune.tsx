@@ -37,7 +37,7 @@ const Fortune = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    toggleActive(value === "dhswja95");
+    toggleActive(value === "qufqlcshdmf" || value === "별빛노을");
   };
 
   return (

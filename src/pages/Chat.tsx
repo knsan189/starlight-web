@@ -34,8 +34,8 @@ const Chat = () => {
 
   return (
     <Container sx={{ background: "#BACEE0", p: 2 }} ref={containerRef}>
-      {messages.map((msg) => (
-        <Paper key={msg.date} sx={{ display: "flex", p: 1, my: 1 }}>
+      {messages.map((msg, index) => (
+        <Paper key={index} sx={{ display: "flex", p: 1, my: 1 }}>
           <Avatar variant="rounded" />
           <Box pl={2}>
             <Box display="flex" alignItems="end">
