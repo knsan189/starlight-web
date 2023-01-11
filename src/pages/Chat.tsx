@@ -1,5 +1,5 @@
 import { Avatar, Box, Container, Paper, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { socket } from "../utils/socket";
 
 interface Message {
@@ -9,6 +9,7 @@ interface Message {
 }
 
 const Chat = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
@@ -18,27 +19,36 @@ const Chat = () => {
         setMessages((prev) => [...prev, args]);
       });
     }
+
     return () => {
       socket.disconnect();
+      if (socket.hasListeners("message")) {
+        socket.off("message");
+      }
     };
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: containerRef.current?.scrollHeight });
+  }, [messages]);
+
   return (
-    <div>
-      <Container>
-        <Paper>
-          {messages.map((msg) => (
-            <Box key={msg.date} display="flex" p={1}>
-              <Avatar />
-              <Box pl={2}>
-                <Typography variant="subtitle2"> {msg.sender}</Typography>
-                <Typography variant="body2"> {msg.msg}</Typography>
-              </Box>
+    <Container sx={{ background: "#BACEE0", p: 2 }} ref={containerRef}>
+      {messages.map((msg) => (
+        <Paper key={msg.date} sx={{ display: "flex", p: 1, my: 1 }}>
+          <Avatar variant="rounded" />
+          <Box pl={2}>
+            <Box display="flex" alignItems="end">
+              <Typography variant="subtitle2"> {msg.sender}</Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ pl: 1 }}>
+                {new Date(msg.date).toLocaleTimeString()}
+              </Typography>
             </Box>
-          ))}
+            <Typography variant="body2"> {msg.msg}</Typography>
+          </Box>
         </Paper>
-      </Container>
-    </div>
+      ))}
+    </Container>
   );
 };
 
