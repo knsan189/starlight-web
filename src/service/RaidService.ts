@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Raid, RaidList } from "../@types/types";
-
-const url = process.env.NODE_ENV === "development" ? "http://knsan189.iptime.org:8080" : "";
+import { SERVER_URL } from "../utils/const";
 
 class RaidService {
   public static getRaid(id: number): Promise<Raid> {
@@ -10,7 +9,7 @@ class RaidService {
         try {
           const response: AxiosResponse<Raid> = await axios({
             method: "get",
-            url: `${url}/api/raid`,
+            url: `${SERVER_URL}/api/raid`,
             params: {
               id,
             },
@@ -29,7 +28,7 @@ class RaidService {
         try {
           const response: AxiosResponse<RaidList> = await axios({
             method: "get",
-            url: `${url}/api/raid/list`,
+            url: `${SERVER_URL}/api/raid/list`,
           });
           resolve(response.data);
         } catch (err) {
@@ -45,7 +44,7 @@ class RaidService {
         try {
           const response: AxiosResponse<Raid> = await axios({
             method: "post",
-            url: `${url}/api/raid`,
+            url: `${SERVER_URL}/api/raid`,
             data: {
               title,
             },
@@ -64,7 +63,7 @@ class RaidService {
         try {
           const response: AxiosResponse<string> = await axios({
             method: "put",
-            url: `${url}/api/raid`,
+            url: `${SERVER_URL}/api/raid`,
             data: {
               id,
               raid,

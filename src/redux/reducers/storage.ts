@@ -12,7 +12,7 @@ import { IUser } from "../../@types/types";
 const { ADD_USER, EDIT_USER, DELETE_USER, SET_USERS, SYNC_STORAGE, SET_SEARCH_LIST } =
   StorageActionTypes;
 
-export const addUser = (user: Omit<IUser, "id">): AddUser => ({
+export const addUser = (user: Omit<IUser, "userCode">): AddUser => ({
   type: ADD_USER,
   payload: { user },
 });

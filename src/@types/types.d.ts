@@ -1,12 +1,15 @@
-import { GetCharResponse } from "./../service/CharService";
-
-export interface IUser extends GetCharResponse {
-  [key: string];
-  tags?: string[];
-  memo?: string;
-  id?: string;
-  createdTime?: Date | string;
+export interface IUser {
   userCode: number;
+  createdTime?: Date | string;
+  tags: string[];
+  memo: string;
+  serverName: string;
+  charName: string;
+  charClass: string;
+  charLevel: number;
+  itemLevel: number;
+  guildName: string;
+  loadTime: string;
 }
 
 export const TYPE_STORAGE = "storage";

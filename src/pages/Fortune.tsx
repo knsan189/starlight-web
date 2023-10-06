@@ -1,4 +1,4 @@
-import { Container, TextField, Paper, Box, Typography } from "@mui/material";
+import { Container, TextField, Paper, Box, Typography, Grid } from "@mui/material";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import FortuneCard from "../components/FortuneCard";
 import FortuneService from "../service/FortuneService";
@@ -41,7 +41,7 @@ const Fortune = () => {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="lg">
       <Paper>
         <Box p={2}>
           <TextField size="small" label="관리 비밀번호" type="password" onChange={handleChange} />
@@ -58,15 +58,19 @@ const Fortune = () => {
           </Box>
         </Box>
       </Paper>
-      {fortunes.map((fortune, index) => (
-        <FortuneCard
-          fortune={fortune}
-          index={index}
-          key={fortune.id}
-          onChange={onChange}
-          onBlur={onBlur}
-        />
-      ))}
+
+      <Grid container spacing={2} mt={1}>
+        {fortunes.map((fortune, index) => (
+          <FortuneCard
+            active={active}
+            fortune={fortune}
+            index={index}
+            key={fortune.id}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+        ))}
+      </Grid>
     </Container>
   );
 };

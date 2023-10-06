@@ -9,31 +9,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { ChangeEvent, ChangeEventHandler } from "react";
-import { GetCharResponse } from "../../service/CharService";
+import React, { ChangeEventHandler } from "react";
 import { getFormattedTime } from "../../utils/timeUtil";
+import { IUser } from "../../@types/types";
 
 interface Props {
-  form: {
-    tags: string[] | undefined;
-    memo: string | undefined;
-  };
-  details?: GetCharResponse;
+  details?: Omit<IUser, "userCode">;
   editMode: boolean;
-  onChange: (name: string, value: any) => void;
+  onChange: (name: "tags" | "memo", value: any) => void;
   onUpdate: () => void;
 }
 
-const UserDetails = ({ details, form, editMode, onChange, onUpdate }: Props) => {
+const UserDetails = ({ details, editMode, onChange, onUpdate }: Props) => {
   if (!details)
     return (
       <Box p={2} height={200}>
         <Typography variant="body2">검색결과가 없습니다</Typography>
       </Box>
     );
-
-  const { serverName, charClass, itemLevel, guildName, charLevel, loadTime } = details;
-  const { tags, memo } = form;
 
   const handleChangeMemo: ChangeEventHandler<HTMLInputElement> = (event) => {
     onChange("memo", event.target.value);
@@ -43,7 +36,7 @@ const UserDetails = ({ details, form, editMode, onChange, onUpdate }: Props) => 
     onChange("tags", newValue);
   };
 
-  const fomattedTime = getFormattedTime(new Date(loadTime));
+  const fomattedTime = getFormattedTime(new Date());
 
   return (
     <Box>
@@ -59,27 +52,27 @@ const UserDetails = ({ details, form, editMode, onChange, onUpdate }: Props) => 
         <Paper>
           <Box p={1} display="flex" justifyContent="space-between">
             <Typography variant="body2">서버</Typography>
-            <Typography variant="body2">{serverName}</Typography>
+            <Typography variant="body2">{details.serverName}</Typography>
           </Box>
           <Divider />
           <Box p={1} display="flex" justifyContent="space-between">
             <Typography variant="body2">직업</Typography>
-            <Typography variant="body2">{charClass}</Typography>
+            <Typography variant="body2">{details.charClass}</Typography>
           </Box>
           <Divider />
           <Box p={1} display="flex" justifyContent="space-between">
             <Typography variant="body2">아이템 레벨</Typography>
-            <Typography variant="body2">{itemLevel}</Typography>
+            <Typography variant="body2">{details.itemLevel}</Typography>
           </Box>
           <Divider />
           <Box p={1} display="flex" justifyContent="space-between">
             <Typography variant="body2">길드</Typography>
-            <Typography variant="body2">{guildName}</Typography>
+            <Typography variant="body2">{details.guildName}</Typography>
           </Box>
           <Divider />
           <Box p={1} display="flex" justifyContent="space-between">
             <Typography variant="body2">캐릭터 레벨</Typography>
-            <Typography variant="body2">{charLevel}</Typography>
+            <Typography variant="body2">{details.charLevel}</Typography>
           </Box>
         </Paper>
       </Box>
@@ -94,7 +87,7 @@ const UserDetails = ({ details, form, editMode, onChange, onUpdate }: Props) => 
             size="small"
             multiline
             onChange={handleChangeMemo}
-            value={memo || ""}
+            value={details.memo}
           />
         </Box>
 
@@ -107,7 +100,7 @@ const UserDetails = ({ details, form, editMode, onChange, onUpdate }: Props) => 
             multiple
             size="small"
             options={[]}
-            value={tags || []}
+            value={details.tags}
             onChange={handleChangeTag}
             renderInput={(params) => <TextField {...params} size="small" />}
             renderTags={(value, getTagProps) =>

@@ -92,9 +92,7 @@ const User = ({ user, userIndex, type, member }: Props) => {
         />
         {type === "storage" && <UserPartyCheck user={user} />}
         <Box px={1} pb={2}>
-          {user.tags?.map((tag, index) => (
-            <Chip label={tag} sx={{ mr: 0.5 }} key={index} />
-          ))}
+          {user.tags?.map((tag, index) => <Chip label={tag} sx={{ mr: 0.5 }} key={index} />)}
         </Box>
         <UserMenu
           user={user}
@@ -103,7 +101,7 @@ const User = ({ user, userIndex, type, member }: Props) => {
           onClose={onToggleMenu}
           onToggleDialog={onToggleDialog}
         />
-        <UserDialog open={dialog} onClose={onToggleDialog} mode="edit" user={user} />
+        <UserDialog open={dialog} onClose={onToggleDialog} user={user} />
       </Card>
     </Draggable>
   );

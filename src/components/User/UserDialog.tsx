@@ -10,38 +10,48 @@ import {
   Typography,
 } from "@mui/material";
 import { debounce } from "lodash";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { IUser } from "../../@types/types";
 import { addUser, editUser } from "../../redux/reducers/storage";
-import CharService, { GetCharResponse } from "../../service/CharService";
-import UserService from "../../service/UserService";
+import CharService from "../../service/CharService";
 import UserDetails from "./UserDetails";
+import { AddUserRequest } from "../../service/UserService";
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  mode: "create" | "edit";
   user?: IUser;
 }
 
-const UserDialog = ({ open, onClose, mode, user }: Props) => {
+const UserDialog = ({ open, onClose, user }: Props) => {
   const dispatch = useDispatch();
-  const [details, setDetails] = useState<GetCharResponse | IUser | undefined>(user);
+  const [details, setDetails] = useState<AddUserRequest>();
   const [loading, toggleLoading] = useState(false);
-  const [form, setForm] = useState(
-    user ? { tags: user.tags, memo: user.memo } : { tags: [], memo: "" },
-  );
 
   const getCharInfo = debounce(async (name) => {
-    const response = await CharService.getChar(name);
-    if (!response) {
-      setDetails(undefined);
-      return;
-    }
-    setDetails(response);
-    toggleLoading(false);
-  }, 1000);
+    try {
+      const response = await CharService.getChar(name);
+
+      if (!response.profile) {
+        return;
+      }
+
+      setDetails({
+        serverName: response.profile.ServerName,
+        charName: response.profile.CharacterName,
+        charClass: response.profile.CharacterClassName,
+        charLevel: response.profile.CharacterLevel,
+        itemLevel: parseFloat(response.profile.ItemMaxLevel.replaceAll(",", "")),
+        guildName: response.profile.GuildName || "",
+        tags: [],
+        memo: "",
+        loadTime: new Date().toUTCString(),
+      });
+
+      toggleLoading(false);
+    } catch (error) {}
+  }, 2000);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     toggleLoading(true);
@@ -51,7 +61,7 @@ const UserDialog = ({ open, onClose, mode, user }: Props) => {
 
   const handleClickAdd = async () => {
     if (details) {
-      dispatch(addUser({ ...details, ...form }));
+      dispatch(addUser(details));
     }
     handleClose();
   };
@@ -59,26 +69,45 @@ const UserDialog = ({ open, onClose, mode, user }: Props) => {
   const handleClose = () => {
     onClose();
     setDetails(undefined);
-    setForm({ tags: [], memo: "" });
   };
 
-  const onChangeForm = useCallback((name: string, value: any) => {
-    setForm((prev) => ({ ...prev, [name]: value }));
+  const onChangeForm = useCallback((name: "tags" | "memo", value: any) => {
+    setDetails((prev) => (prev ? { ...prev, [name]: value } : prev));
   }, []);
 
   const onUpdate = useCallback(async () => {
     if (!user) return;
     toggleLoading(true);
     const response = await CharService.getChar(user.charName);
-    if (response) setDetails(response);
+
+    if (response.profile) {
+      setDetails({
+        serverName: response.profile.ServerName,
+        charName: response.profile.CharacterName,
+        charClass: response.profile.CharacterClassName,
+        charLevel: response.profile.CharacterLevel,
+        itemLevel: parseFloat(response.profile.ItemMaxLevel.replaceAll(",", "")),
+        guildName: response.profile.GuildName || "",
+        tags: [],
+        memo: "",
+        loadTime: new Date().toUTCString(),
+      });
+    }
+
     toggleLoading(false);
   }, [user]);
 
   const handleClickEdit = async () => {
-    if (!user) return;
-    dispatch(editUser(user.charName, { ...user, ...details, ...form }));
+    if (!user || !details) return;
+    dispatch(editUser(user.charName, { ...details, userCode: user.userCode }));
     onClose();
   };
+
+  useEffect(() => {
+    if (user) {
+      setDetails(user);
+    }
+  }, [user]);
 
   return (
     <Dialog open={open} onClose={onClose} closeAfterTransition>
@@ -98,7 +127,6 @@ const UserDialog = ({ open, onClose, mode, user }: Props) => {
       <DialogContent dividers sx={{ p: 0, minWidth: 500 }}>
         {!loading ? (
           <UserDetails
-            form={form}
             details={details}
             editMode={Boolean(user)}
             onChange={onChangeForm}

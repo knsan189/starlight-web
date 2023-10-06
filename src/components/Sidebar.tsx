@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { Box, Button, ButtonGroup, Drawer, TextField, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Drawer, Typography } from "@mui/material";
 import { debounce } from "lodash";
 import React, { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -51,12 +51,12 @@ const Sidebar = ({ open, onClose }: Props) => {
     [delayQuery, dispatch],
   );
 
-  const handleClickSort = (type: keyof IUser) => () => {
+  const handleClickSort = (type: "charName" | "itemLevel" | "charClass") => () => {
     const newUsers = users.sort((a, b) => {
       if (typeof a[type] === "string") {
         return a[type] < b[type] ? -1 : a[type] > b[type] ? 1 : 0;
       }
-      return b[type] - a[type];
+      return (b[type] as number) - (a[type] as number);
     });
     dispatch(setUsers(newUsers));
   };
@@ -95,7 +95,7 @@ const Sidebar = ({ open, onClose }: Props) => {
       <Box pl={3} pr={2}>
         <Storage />
       </Box>
-      <UserDialog open={dialog} onClose={onToggleDialog} mode="create" />
+      <UserDialog open={dialog} onClose={onToggleDialog} />
     </Drawer>
   );
 };

@@ -1,67 +1,107 @@
 import axios, { AxiosResponse } from "axios";
-import * as cheerio from "cheerio";
+import { SERVER_URL } from "../utils/const";
+
+interface Profile {
+  CharacterImage: string;
+  ExpeditionLevel: number;
+  PvpGradeName: string;
+  TownLevel: number | null;
+  TownName: string | null;
+  Title: string;
+  GuildMemberGrade: string;
+  GuildName: string;
+  UsingSkillPoint: number;
+  TotalSkillPoint: number;
+  Stats: [
+    {
+      Type: string;
+      Value: string;
+      Tooltip: string[];
+    },
+  ];
+  Tendencies: [
+    {
+      Type: string;
+      Point: number;
+      MaxPoint: number;
+    },
+  ];
+  ServerName: string;
+  CharacterName: string;
+  CharacterLevel: number;
+  CharacterClassName: string;
+  ItemAvgLevel: string;
+  ItemMaxLevel: string;
+}
+
+interface Equipment {
+  Type: string;
+  Name: string;
+  Icon: string;
+  Grade: string;
+  Tooltip: string;
+}
+
+interface Effect {
+  Name: string;
+  Description: string;
+}
+
+interface Engraving {
+  Slot: number;
+  Name: string;
+  Icon: string;
+  Tooltip: string;
+}
+
+interface Gem {
+  Slot: number;
+  Name: string;
+  Icon: string;
+  Level: number;
+  Grade: string;
+  Tooltip: string;
+}
+
+interface Card {
+  Slot: number;
+  Name: string;
+  Icon: string;
+  AwakeCount: string;
+  AwakeTotal: string;
+  Grade: string;
+  Tooltip: string;
+}
 
 export interface GetCharResponse {
-  itemLevel: number;
-  charLevel: string;
-  charClass: string;
-  charName: string;
-  serverName: string;
-  guildName?: string;
-  loadTime: string | Date;
+  profile: Profile | null;
+  equipment: Equipment[] | null;
+  engravings: { Engravings: Engraving[]; Effects: Effect[] } | null;
+  gems: { Gems: Gem[]; Effects: Effect[] } | null;
+  cards: { Cards: Card[]; Effects: Effect[] } | null;
 }
 
 //profile-character-info__server
 //game-info__guild
 
-const url = process.env.NODE_ENV === "development" ? "http://knsan189.iptime.org:8080" : "";
-
 class CharService {
-  public static async getChar(nickname: string): Promise<GetCharResponse | null> {
-    try {
-      const response: AxiosResponse<string> = await axios({
-        method: "GET",
-        url: `${url}/api/proxy/Profile/Character/${nickname}`,
-      });
-
-      const parseHtml = response.data.replace("<!DOCTYPE html>", "").replace(/\r?\n|\r/g, "");
-
-      const $ = cheerio.load(parseHtml);
-
-      const charClass = $(".profile-character-info__img").attr("alt") as string;
-
-      const itemLevel = $(".level-info2__expedition")
-        .text()
-        .replace("장착 아이템 레벨Lv.", "")
-        .replace(",", "");
-
-      const charLevel = $(".level-info__item")
-        .text()
-        .replace(/[^0-9]/g, "");
-
-      const serverName = $(".profile-character-info__server").text().replace("@", "");
-
-      const guildName = $(".game-info__guild").text().substring(2);
-
-      const loadTime = new Date();
-
-      if (!charClass) {
-        throw new Error("오류");
-      }
-
-      return {
-        charClass,
-        itemLevel: parseFloat(itemLevel),
-        charLevel,
-        charName: nickname,
-        serverName,
-        guildName,
-        loadTime,
-      };
-    } catch (err) {
-      console.log(err);
-      return null;
-    }
+  public static getChar(nickname: string): Promise<GetCharResponse> {
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          const response: AxiosResponse<GetCharResponse> = await axios({
+            method: "GET",
+            url: `${SERVER_URL}/api/lostark/user`,
+            params: {
+              userName: nickname,
+            },
+          });
+          resolve(response.data);
+        } catch (err) {
+          reject(err);
+        }
+      })();
+    });
   }
 }
 

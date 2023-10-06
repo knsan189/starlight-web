@@ -25,7 +25,7 @@ export interface StorageState {
 
 export interface AddUser {
   type: StorageActionTypes.ADD_USER;
-  payload: { user: Omit<IUser, "id"> };
+  payload: { user: Omit<IUser, "userCode"> };
 }
 
 export interface EditUser {

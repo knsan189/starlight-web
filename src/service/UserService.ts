@@ -1,16 +1,17 @@
 import axios from "axios";
 import { IUser } from "../@types/types";
+import { SERVER_URL } from "../utils/const";
 
-const url = process.env.NODE_ENV === "development" ? "http://knsan189.iptime.org:8080" : "";
+export type AddUserRequest = Omit<IUser, "userCode">;
 
 class UserService {
-  public static addMember(user: Omit<IUser, "id">): Promise<IUser> {
-    return new Promise((resolve, reject) => {
+  public static addMember(user: AddUserRequest) {
+    return new Promise<IUser>((resolve, reject) => {
       (async () => {
         try {
           const response = await axios({
             method: "post",
-            url: `${url}/api/members`,
+            url: `${SERVER_URL}/api/members`,
             data: { user },
           });
           resolve(response.data);
@@ -27,7 +28,7 @@ class UserService {
         try {
           const response = await axios({
             method: "get",
-            url: `${url}/api/members`,
+            url: `${SERVER_URL}/api/members`,
           });
           resolve(response.data);
         } catch (err) {
@@ -43,7 +44,7 @@ class UserService {
         try {
           const response = await axios({
             method: "put",
-            url: `${url}/api/members`,
+            url: `${SERVER_URL}/api/members`,
             params: {
               charName,
               user,
@@ -63,7 +64,7 @@ class UserService {
         try {
           const response = await axios({
             method: "delete",
-            url: `${url}/api/members`,
+            url: `${SERVER_URL}/api/members`,
             params: {
               userCode,
             },
